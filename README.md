@@ -23,14 +23,6 @@ Este projeto está sendo desenvolvido como forma de estudo de Spring Boot, evolu
 - Java 21
 - Spring Boot
 - Maven
-
-> Futuramente:
-
-- Spring Data JPA
-- Hibernate
-- PostgreSQL
-- Spring Security
-- JWT
 - Swagger
 
 ---
