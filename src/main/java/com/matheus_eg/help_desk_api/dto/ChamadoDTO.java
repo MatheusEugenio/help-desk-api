@@ -1,8 +1,8 @@
 package com.matheus_eg.help_desk_api.dto;
 
-import com.matheus_eg.help_desk_api.database.model.PrioridadeEnum;
+import com.matheus_eg.help_desk_api.database.enums.PrioridadeEnum;
 import com.matheus_eg.help_desk_api.database.model.SolicitanteModel;
-import com.matheus_eg.help_desk_api.database.model.StatusEnum;
+import com.matheus_eg.help_desk_api.database.enums.StatusEnum;
 import lombok.*;
 
 @Getter
