@@ -1,11 +1,11 @@
-package com.matheus_eg.help_desk_api.controller;
+package com.controller;
 
-import com.matheus_eg.help_desk_api.database.enums.PrioridadeEnum;
-import com.matheus_eg.help_desk_api.database.enums.StatusEnum;
-import com.matheus_eg.help_desk_api.database.model.ChamadoModel;
-import com.matheus_eg.help_desk_api.dto.ChamadoDTO;
-import com.matheus_eg.help_desk_api.exception.NotFoundException;
-import com.matheus_eg.help_desk_api.service.ChamadoService;
+import com.database.enums.PrioridadeEnum;
+import com.database.enums.StatusEnum;
+import com.database.model.ChamadoModel;
+import com.dto.ChamadoDTO;
+import com.exception.NotFoundException;
+import com.service.ChamadoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

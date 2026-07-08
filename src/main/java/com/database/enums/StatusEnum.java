@@ -1,4 +1,4 @@
-package com.matheus_eg.help_desk_api.database.enums;
+package com.database.enums;
 
 public enum StatusEnum {
     ABERTO,

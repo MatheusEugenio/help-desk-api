@@ -1,11 +1,11 @@
-package com.matheus_eg.help_desk_api.service;
+package com.service;
 
-import com.matheus_eg.help_desk_api.database.model.ChamadoModel;
-import com.matheus_eg.help_desk_api.database.enums.PrioridadeEnum;
-import com.matheus_eg.help_desk_api.database.model.SolicitanteModel;
-import com.matheus_eg.help_desk_api.database.enums.StatusEnum;
-import com.matheus_eg.help_desk_api.dto.ChamadoDTO;
-import com.matheus_eg.help_desk_api.exception.NotFoundException;
+import com.database.model.ChamadoModel;
+import com.database.enums.PrioridadeEnum;
+import com.database.model.SolicitanteModel;
+import com.database.enums.StatusEnum;
+import com.dto.ChamadoDTO;
+import com.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

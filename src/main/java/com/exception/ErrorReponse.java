@@ -1,4 +1,4 @@
-package com.matheus_eg.help_desk_api.exception;
+package com.exception;
 
 import lombok.*;
 

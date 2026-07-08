@@ -1,4 +1,4 @@
-package com.matheus_eg.help_desk_api.database.model;
+package com.database.model;
 
 import lombok.*;
 

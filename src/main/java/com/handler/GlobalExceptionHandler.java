@@ -1,7 +1,7 @@
-package com.matheus_eg.help_desk_api.handler;
+package com.handler;
 
-import com.matheus_eg.help_desk_api.exception.ErrorReponse;
-import com.matheus_eg.help_desk_api.exception.NotFoundException;
+import com.exception.ErrorReponse;
+import com.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
