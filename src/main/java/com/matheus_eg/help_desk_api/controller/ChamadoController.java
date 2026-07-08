@@ -31,21 +31,21 @@ public class ChamadoController {
         return chamadoService.createdChamado(chamadoDTO);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "/{id}/prioridade")
     @ResponseStatus(HttpStatus.OK)
-    public ChamadoModel updatePrioridadeChamado(@RequestParam("id") Integer id, @RequestParam ("prioridade") PrioridadeEnum prioridade) throws NotFoundException {
+    public ChamadoModel updatePrioridadeChamado(@PathVariable("id") Integer id, @RequestParam ("prioridade") PrioridadeEnum prioridade) throws NotFoundException {
         return chamadoService.updatePrioridadeChamado(id, prioridade);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "/{id}/status")
     @ResponseStatus(HttpStatus.OK)
-    public ChamadoModel updateStatusChamado(@RequestParam ("id") Integer id, @RequestParam ("status") StatusEnum status) throws NotFoundException {
+    public ChamadoModel updateStatusChamado(@PathVariable ("id") Integer id, @RequestParam ("status") StatusEnum status) throws NotFoundException {
         return chamadoService.updateStatusChamado(id, status);
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "/{id}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteChamado(@RequestParam ("id") Integer id) {
+    public void deleteChamado(@PathVariable("id") Integer id) {
         chamadoService.deleteChamado(id);
     }
 
