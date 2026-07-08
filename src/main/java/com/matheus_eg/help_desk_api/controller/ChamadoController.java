@@ -1,0 +1,52 @@
+package com.matheus_eg.help_desk_api.controller;
+
+import com.matheus_eg.help_desk_api.database.enums.PrioridadeEnum;
+import com.matheus_eg.help_desk_api.database.enums.StatusEnum;
+import com.matheus_eg.help_desk_api.database.model.ChamadoModel;
+import com.matheus_eg.help_desk_api.dto.ChamadoDTO;
+import com.matheus_eg.help_desk_api.exception.NotFoundException;
+import com.matheus_eg.help_desk_api.service.ChamadoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/v1/contrl")
+@RequiredArgsConstructor
+public class ChamadoController {
+
+    private final ChamadoService chamadoService;
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ChamadoModel> finAll() {
+        return chamadoService.findAll();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ChamadoModel createChamado(@RequestBody ChamadoDTO chamadoDTO) {
+        return chamadoService.createdChamado(chamadoDTO);
+    }
+
+    @PatchMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ChamadoModel updatePrioridadeChamado(@RequestParam("id") Integer id, @RequestParam ("prioridade") PrioridadeEnum prioridade) throws NotFoundException {
+        return chamadoService.updatePrioridadeChamado(id, prioridade);
+    }
+
+    @PatchMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ChamadoModel updateStatusChamado(@RequestParam ("id") Integer id, @RequestParam ("status") StatusEnum status) throws NotFoundException {
+        return chamadoService.updateStatusChamado(id, status);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteChamado(@RequestParam ("id") Integer id) {
+        chamadoService.deleteChamado(id);
+    }
+
+}
