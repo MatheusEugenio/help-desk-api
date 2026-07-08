@@ -1,4 +1,18 @@
 package com.matheus_eg.help_desk_api.database.model;
 
+import lombok.*;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChamadoModel {
+
+    private Integer id;
+    private String titulo;
+    private StatusEnum status;
+    private PrioridadeEnum prioridade;
+    private SolicitanteModel solicitante;
 }
