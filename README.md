@@ -89,7 +89,7 @@ FECHADO
       "nome": "João Silva",
       "email": "joaosilva12@gmail.com"
                 },
-  "prioridade": "ALTA"
+  "prioridade": "ALTA",
   "status: "ABERTO"
 }
 ```
