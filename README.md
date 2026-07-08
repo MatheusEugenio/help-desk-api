@@ -1,389 +1,143 @@
 # Help Desk API
 
-Uma API REST desenvolvida com Spring Boot para gerenciamento de chamados técnicos.
+API REST desenvolvida com **Spring Boot** para gerenciamento de chamados de suporte técnico.
 
-O projeto tem como objetivo simular um sistema utilizado por empresas para registrar, acompanhar e resolver solicitações de suporte interno.
-
-Este projeto está sendo desenvolvido como forma de estudo de Spring Boot, evoluindo gradativamente conforme novos conceitos são aprendidos.
+O projeto simula um sistema de Help Desk utilizado por empresas para registrar e acompanhar solicitações de suporte. Seu desenvolvimento tem como objetivo praticar os fundamentos do Spring Boot e evoluir conforme novos conceitos forem aprendidos.
 
 ---
 
-# Objetivos
-
-- Praticar arquitetura em camadas
-- Desenvolver uma API REST
-- Aplicar boas práticas de organização do projeto
-- Evoluir o projeto conforme novos conteúdos forem aprendidos
-- Criar um projeto consistente para portfólio
-
----
-
-# Tecnologias
+## 🚀 Tecnologias
 
 - Java 21
 - Spring Boot
 - Maven
-- Swagger
+- Lombok
+- Spring Validation *(em desenvolvimento)*
+- SpringDoc OpenAPI (Swagger)
 
 ---
 
-# Contexto
+## 📌 Funcionalidades
 
-Imagine uma empresa onde os colaboradores podem abrir chamados para a equipe de suporte.
+Atualmente a API permite:
 
-Exemplos:
-
-- Não consigo acessar meu e-mail.
-- Minha impressora não funciona.
-- Esqueci minha senha.
-- O sistema está apresentando erro.
-- Meu computador não liga.
-
-Cada solicitação gera um chamado.
-
-Esse chamado pode ser acompanhado até sua resolução.
+- Criar um chamado
+- Listar todos os chamados
+- Alterar a prioridade de um chamado
+- Alterar o status de um chamado
+- Excluir um chamado
 
 ---
 
-# Fluxo do sistema
+## 🔄 Fluxo do chamado
 
-```
-
-Funcionário
-│
-│ Cria um chamado
-▼
+```text
 ABERTO
-│
-▼
-EM ATENDIMENTO
-│
-▼
+   │
+   ▼
+EM_ATENDIMENTO
+   │
+   ▼
 FECHADO
-
 ```
 
 ---
 
-# Funcionalidades atuais
+## 📄 Modelo do chamado
 
-- Criar chamado
-- Listar chamados
-- Buscar chamado por ID
-- Atualizar informações de um chamado
-- Excluir chamado
+| Campo | Tipo |
+|--------|------|
+| id | Integer |
+| titulo | String |
+| solicitante | Solicitante |
+| prioridade | PrioridadeEnum |
+| status | StatusEnum |
 
----
+### Status
 
-# Funcionalidades futuras
+- ABERTO
+- EM_ATENDIMENTO
+- FECHADO
 
-- Banco de dados com PostgreSQL
-- Relacionamento entre Usuário e Chamado
-- Comentários
-- Histórico
-- Categorias
-- Paginação
-- Filtros
-- Spring Security
-- JWT
-- Swagger
-- Testes unitários
+### Prioridades
+
+- BAIXA
+- MEDIA
+- ALTA
 
 ---
 
-# Estrutura do Projeto
+## 📡 Endpoints
 
+| Método | Endpoint | Descrição |
+|---------|----------|-----------|
+| GET | `/v1/contrl` | Lista todos os chamados |
+| POST | `/v1/contrl` | Cria um novo chamado |
+| PATCH | `/v1/contrl/{id}/prioridade` | Atualiza a prioridade |
+| PATCH | `/v1/contrl/{id}/status` | Atualiza o status |
+| DELETE | `/v1/contrl/{id}/delete` | Remove um chamado |
+
+---
+
+## 📥 Exemplo de criação
+
+```json
+{
+  "titulo": "Erro ao acessar o sistema",
+  "descricao": "Ao realizar login recebo erro 500.",
+  "solicitante": {
+      "nome": "João Silva",
+      "email": "joaosilva12@gmail.com"
+                },
+  "prioridade": "ALTA"
+  "status: "ABERTO"
+}
 ```
 
+---
+
+## 📂 Estrutura do projeto
+
+```text
 src
 └── main
-└── java
-└── com.helpdesk
-├── controller
-├── dto
-├── exception
-├── handler
-├── model
-├── repository
-├── service
-└── config
-
+    └── java
+        ├── config
+        ├── controller
+        ├── database
+        │   ├── enums
+        │   ├── model
+        │   └── repository
+        ├── dto
+        ├── exception
+        ├── handler
+        └── service
 ```
 
 ---
 
-# Arquitetura
-
-```
-
-Cliente
-
-↓
-
-Controller
-
-↓
-
-Service
-
-↓
-
-Repository
-
-↓
-
-Dados
-
-```
-
-Cada camada possui uma responsabilidade específica.
-
-## Controller
-
-Recebe as requisições HTTP.
-
-Não contém regras de negócio.
-
-## Service
-
-Responsável pelas regras de negócio da aplicação.
-
-## Repository
-
-Responsável pelo acesso aos dados.
-
-Nesta primeira versão, os dados permanecem apenas em memória.
-
-## DTO
-
-Responsável pela comunicação entre cliente e API.
-
-## Exception
-
-Contém exceções personalizadas.
-
----
-
-# Modelo do Chamado
-
-| Campo | Tipo | Descrição |
-|--------|------|-----------|
-| id | Long | Identificador |
-| titulo | String | Resumo do problema |
-| descricao | String | Explicação detalhada |
-| status | Enum | Estado atual |
-| prioridade | Enum | Prioridade do chamado |
-| solicitante | String | Nome do usuário |
-
----
-
-# Status
-
-```
-
-ABERTO
-
-EM_ATENDIMENTO
-
-FECHADO
-
-```
-
-### Fluxo permitido
-
-```
-
-ABERTO
-
-↓
-
-EM_ATENDIMENTO
-
-↓
-
-FECHADO
-
-```
-
----
-
-# Prioridades
-
-```
-
-BAIXA
-
-MEDIA
-
-ALTA
-
-```
-
----
-
-# Endpoints
-
-## Criar chamado
-
-POST
-
-```
-
-/chamados
-
-```
-
----
-
-## Buscar todos
-
-GET
-
-```
-
-/chamados
-
-```
-
----
-
-## Buscar por ID
-
-GET
-
-```
-
-/chamados/{id}
-
-```
-
----
-
-## Atualizar
-
-PUT
-
-```
-
-/chamados/{id}
-
-```
-
----
-
-## Excluir
-
-DELETE
-
-```
-
-/chamados/{id}
-
-```
-
----
-
-# Exemplo de criação
-
-```json
-{
-  "titulo": "Erro ao acessar o sistema",
-  "descricao": "Ao tentar fazer login, recebo uma mensagem de erro.",
-  "prioridade": "ALTA",
-  "solicitante": "João Silva"
-}
-```
-
----
-
-# Exemplo de resposta
-
-```json
-{
-  "id": 1,
-  "titulo": "Erro ao acessar o sistema",
-  "descricao": "Ao tentar fazer login, recebo uma mensagem de erro.",
-  "status": "ABERTO",
-  "prioridade": "ALTA",
-  "solicitante": "João Silva"
-}
-```
-
----
-
-# Regras de negócio
-
-O sistema possui algumas regras simples.
-
-### Criação
-
-- Todo chamado inicia com status **ABERTO**.
-- O ID é gerado automaticamente.
-- O título é obrigatório.
-- A descrição é obrigatória.
-
-### Atualização
-
-- Um chamado fechado não pode ser alterado.
-- Apenas chamados existentes podem ser atualizados.
-
-### Exclusão
-
-- Não é possível excluir um chamado inexistente.
-
----
-
-# Roadmap
-
-## Etapa 1
-
-- [x] CRUD de chamados
+## 🛣️ Roadmap
+
+- [x] CRUD básico de chamados
+- [x] Alteração de status
+- [x] Alteração de prioridade
 - [x] DTO
-- [x] Tratamento de exceções
-
-## Etapa 2
-
-- [ ] Validações
-- [ ] Enum Status
-- [ ] Enum Prioridade
-
-## Etapa 3
-
-- [ ] Spring Data JPA
+- [x] Tratamento global de exceções
+- [x] Documentação com Swagger
+- [ ] Bean Validation
+- [ ] Busca por ID
+- [ ] Persistência com Spring Data JPA
 - [ ] Banco H2
-
-## Etapa 4
-
 - [ ] PostgreSQL
-
-## Etapa 5
-
-- [ ] Relacionamentos
-
-## Etapa 6
-
-- [ ] Paginação
-
-## Etapa 7
-
+- [ ] Relacionamento entre entidades
 - [ ] Spring Security
-
-## Etapa 8
-
 - [ ] JWT
-
-## Etapa 9
-
-- [ ] Swagger
-
-## Etapa 10
-
-- [ ] Testes
+- [ ] Testes unitários
 
 ---
 
-# Aprendizados
+## 🎯 Objetivo
 
-Este projeto está sendo utilizado para praticar conceitos fundamentais do Spring Boot, sendo expandido conforme novos conteúdos são estudados.
+Este projeto foi criado para consolidar os fundamentos do Spring Boot através da construção de uma API REST organizada em camadas.
 
-Cada nova tecnologia aprendida será incorporada ao projeto, tornando-o gradualmente mais próximo de uma aplicação utilizada em ambientes corporativos.
+Conforme novos conteúdos forem estudados, novas funcionalidades serão incorporadas, transformando a aplicação em um sistema de Help Desk cada vez mais próximo de um ambiente real.
