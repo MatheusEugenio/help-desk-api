@@ -1,3 +1,16 @@
 spring:
   application:
     name: help-desk-api
+  datasource:
+    url:
+    user:
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    showsql: true
+    properties:
+      hibernate:
+        format_sql: true
+
