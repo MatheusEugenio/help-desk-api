@@ -9,11 +9,9 @@ O projeto simula um sistema de Help Desk utilizado por empresas para registrar e
 ## 🚀 Tecnologias
 
 - Java 21
-- Spring Boot
-- Lombok
-- Spring Validation *(em desenvolvimento)*
-- SpringDoc OpenAPI (Swagger)
-
+- Spring Boot | JPA
+- PostgreSQL
+  
 ---
 
 ## 📌 Funcionalidades
