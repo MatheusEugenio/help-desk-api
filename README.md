@@ -10,7 +10,6 @@ O projeto simula um sistema de Help Desk utilizado por empresas para registrar e
 
 - Java 21
 - Spring Boot
-- Maven
 - Lombok
 - Spring Validation *(em desenvolvimento)*
 - SpringDoc OpenAPI (Swagger)
