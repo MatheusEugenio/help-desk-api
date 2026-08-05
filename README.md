@@ -16,7 +16,7 @@ O projeto simula um sistema de Help Desk utilizado por empresas para registrar e
 
 ## 📌 Funcionalidades
 
-Atualmente a API permite:
+A API permite:
 
 - Criar um chamado
 - Listar todos os chamados
