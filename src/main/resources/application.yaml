@@ -2,9 +2,9 @@ spring:
   application:
     name: help-desk-api
   datasource:
-    url:
-    user:
-    password:
+    url: jdbc:postgresql://localhost:5432/helpdesk
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   jpa:
     hibernate:
