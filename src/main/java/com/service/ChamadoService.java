@@ -2,7 +2,7 @@ package com.service;
 
 import com.database.model.ChamadoModel;
 import com.database.enums.PrioridadeEnum;
-import com.database.model.SolicitanteModel;
+import com.database.model.UsuarioModel;
 import com.database.enums.StatusEnum;
 import com.dto.ChamadoDTO;
 import com.exception.NotFoundException;
@@ -22,7 +22,7 @@ public class ChamadoService {
                         .status(StatusEnum.ABERTO)
                         .titulo("Esqueci senha")
                         .prioridade(PrioridadeEnum.ALTA)
-                        .solicitante(SolicitanteModel.builder()
+                        .solicitante(UsuarioModel.builder()
                                 .nome("Jamerson")
                                 .email("jamersonCapa12@gmail.com")
                                 .build())
@@ -32,7 +32,7 @@ public class ChamadoService {
                 .status(StatusEnum.EM_ATENDIMENTO)
                 .titulo("Minha impressora não funciona")
                 .prioridade(PrioridadeEnum.BAIXA)
-                .solicitante(SolicitanteModel.builder()
+                .solicitante(UsuarioModel.builder()
                         .nome("Cleiton")
                         .email("cleitongrau14@gmail.com")
                         .build())
@@ -42,7 +42,7 @@ public class ChamadoService {
                 .status(StatusEnum.EM_ATENDIMENTO)
                 .titulo("Não consigo acessar meu e-mail")
                 .prioridade(PrioridadeEnum.MEDIA)
-                .solicitante(SolicitanteModel.builder()
+                .solicitante(UsuarioModel.builder()
                         .nome("Joelma")
                         .email("joelma_calips42@gmail.com")
                         .build())
@@ -52,7 +52,7 @@ public class ChamadoService {
                 .status(StatusEnum.FINALIZADO)
                 .titulo("O sistema está apresentando erro")
                 .prioridade(PrioridadeEnum.ALTA)
-                .solicitante(SolicitanteModel.builder()
+                .solicitante(UsuarioModel.builder()
                         .nome("Dilma")
                         .email("roussefVai34@gmail.com")
                         .build())
