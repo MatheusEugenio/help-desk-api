@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SolicitanteModel {
+public class UsuarioModel {
 
     private String nome;
     private String email;
