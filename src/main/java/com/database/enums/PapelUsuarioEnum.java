@@ -1,4 +1,7 @@
 package com.database.enums;
 
-public enum PapelUsuario {
+public enum PapelUsuarioEnum {
+    COLABORADOR,
+    ATENDENTE,
+    ADMINISTRADOR
 }
