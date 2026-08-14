@@ -72,11 +72,11 @@ INATIVO
 
 | Método | Endpoint | Descrição |
 |---------|----------|-----------|
-| GET | `/v1/contrl` | Lista todos os chamados |
-| POST | `/v1/contrl` | Cria um novo chamado |
-| PATCH | `/v1/contrl/{id}/prioridade` | Atualiza a prioridade |
-| PATCH | `/v1/contrl/{id}/status` | Atualiza o status |
-| DELETE | `/v1/contrl/{id}/delete` | Remove um chamado |
+| GET | `/v1/chamado` | Lista todos os chamados |
+| POST | `/v1/chamado` | Cria um novo chamado |
+| PATCH | `/v1/chamado/{id}/{prioridade}` | Atualiza a prioridade |
+| PATCH | `/v1/chamado/{id}/{status}` | Atualiza o status |
+| DELETE | `/v1/chamado/{id}/delete` | Remove um chamado |
 
 ---
 
