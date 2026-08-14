@@ -4,4 +4,5 @@ public enum StatusEnum {
     ABERTO,
     EM_ATENDIMENTO,
     FINALIZADO,
+    INATIVO,
 }
