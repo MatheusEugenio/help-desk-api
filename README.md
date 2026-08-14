@@ -58,6 +58,7 @@ INATIVO
 - ABERTO
 - EM_ATENDIMENTO
 - FECHADO
+- INATIVO
 
 ### Prioridades
 
