@@ -2,109 +2,138 @@ package com.service;
 
 import com.database.model.ChamadoModel;
 import com.database.enums.PrioridadeEnum;
-import com.database.model.UsuarioModel;
 import com.database.enums.StatusEnum;
+import com.database.model.HistoricoChamadoModel;
+import com.database.repository.IChamadoRepository;
+import com.database.repository.IHistoricoChamadoRepository;
 import com.dto.ChamadoDTO;
+import com.exception.AlreadyExistsException;
+import com.exception.CallCompletedException;
+import com.exception.CallInactiveException;
 import com.exception.NotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ChamadoService {
 
-    private final static List<ChamadoModel> chamados = new ArrayList<>();
-
-    static{
-        chamados.add(ChamadoModel.builder()
-                        .id(1)
-                        .status(StatusEnum.ABERTO)
-                        .titulo("Esqueci senha")
-                        .prioridade(PrioridadeEnum.ALTA)
-                        .solicitante(UsuarioModel.builder()
-                                .nome("Jamerson")
-                                .email("jamersonCapa12@gmail.com")
-                                .build())
-                        .build());
-        chamados.add(ChamadoModel.builder()
-                .id(2)
-                .status(StatusEnum.EM_ATENDIMENTO)
-                .titulo("Minha impressora não funciona")
-                .prioridade(PrioridadeEnum.BAIXA)
-                .solicitante(UsuarioModel.builder()
-                        .nome("Cleiton")
-                        .email("cleitongrau14@gmail.com")
-                        .build())
-                .build());
-        chamados.add(ChamadoModel.builder()
-                .id(3)
-                .status(StatusEnum.EM_ATENDIMENTO)
-                .titulo("Não consigo acessar meu e-mail")
-                .prioridade(PrioridadeEnum.MEDIA)
-                .solicitante(UsuarioModel.builder()
-                        .nome("Joelma")
-                        .email("joelma_calips42@gmail.com")
-                        .build())
-                .build());
-        chamados.add(ChamadoModel.builder()
-                .id(4)
-                .status(StatusEnum.FINALIZADO)
-                .titulo("O sistema está apresentando erro")
-                .prioridade(PrioridadeEnum.ALTA)
-                .solicitante(UsuarioModel.builder()
-                        .nome("Dilma")
-                        .email("roussefVai34@gmail.com")
-                        .build())
-                .build());
-    }
+    private final IChamadoRepository chamadoRepository;
+    private final IHistoricoChamadoRepository historicoRepository;
 
     public List<ChamadoModel> findAll(){
-        return new ArrayList<ChamadoModel>(chamados);
+        return chamadoRepository.findAll();
     }
 
-    public ChamadoModel createdChamado(ChamadoDTO chamadoDTO) {
+    @Transactional(rollbackFor = Exception.class)
+    public ChamadoDTO createdChamado(ChamadoDTO chamadoDTO) throws AlreadyExistsException {
 
-        Integer newId = chamados.stream()
-                .mapToInt(ChamadoModel::getId)
-                .max()
-                .orElse(0) + 1;
+        ChamadoModel chamado = chamadoRepository.findByTitulo(chamadoDTO.getTitulo())
+                .orElse(null);
 
-        ChamadoModel newChamado = ChamadoModel.builder()
-                .id(newId)
+        if (chamado != null) {
+            throw new AlreadyExistsException("Já existe chamado com o mesmo título!");
+        }
+
+        chamado = ChamadoModel.builder()
                 .titulo(chamadoDTO.getTitulo())
                 .status(chamadoDTO.getStatus())
                 .prioridade(chamadoDTO.getPrioridade())
                 .solicitante(chamadoDTO.getSolicitante())
                 .build();
 
-        chamados.add(newChamado);
-        return newChamado;
+        chamadoRepository.save(chamado);
+
+        HistoricoChamadoModel historico = HistoricoChamadoModel.builder()
+                .tipoAlteracao("CRIAÇÃO")
+                .valorAnterior(null)
+                .novoValor(StatusEnum.ABERTO.toString())
+                .chamado(chamado)
+                .autor(chamado.getSolicitante())
+                .build();
+
+        chamado.getHistoricos().add(historico);
+
+        historicoRepository.save(historico);
+
+        return convertForChamadoDTO(chamado);
     }
 
-    public ChamadoModel updatePrioridadeChamado(Integer id, PrioridadeEnum prioridade) throws NotFoundException {
+    public ChamadoDTO updatePrioridadeChamado(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
 
-        ChamadoModel chamado = chamados.stream()
-                .filter(c -> c.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Usuario com id = "+id+" não encontrado"));
+        ChamadoModel chamado = chamadoRepository.findById(id)
+                .orElse(null);
+
+        if (chamado == null){
+            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
+        }
+
+        if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
+            throw new CallCompletedException("Impossível alterar prioridade, chamado já foi finalizado!");
+        }
+
+        if (chamado.getStatus().equals(StatusEnum.INATIVO)){
+            throw new CallInactiveException("Impossível alterar prioridade, chamado já está inativo!");
+        }
 
         chamado.setPrioridade(prioridade);
-        return chamado;
+
+        chamadoRepository.save(chamado);
+
+        return convertForChamadoDTO(chamado);
     }
 
-    public ChamadoModel updateStatusChamado(Integer id, StatusEnum status) throws NotFoundException {
+    public ChamadoDTO updateStatusChamado(Long id, StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
 
-        ChamadoModel chamado = chamados.stream()
-                .filter(c -> c.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Usuario com id = "+id+" não encontrado"));
+        ChamadoModel chamado = chamadoRepository.findById(id)
+                .orElse(null);
+
+        if (chamado == null){
+            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
+        }
+
+        if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
+            throw new CallCompletedException("Impossível alterar status, chamado já foi finalizado!");
+        }
+
+        if (chamado.getStatus().equals(StatusEnum.INATIVO)){
+            throw new CallInactiveException("Impossível alterar status, chamado já está inativo!");
+        }
 
         chamado.setStatus(status);
-        return chamado;
+
+        chamadoRepository.save(chamado);
+
+        return convertForChamadoDTO(chamado);
     }
 
-    public void deleteChamado(Integer id) {
-        chamados.removeIf(c -> c.getId().equals(id));
+    public void inativarChamado(Long id) throws NotFoundException {
+
+        ChamadoModel chamado = chamadoRepository.findById(id)
+                .orElse(null);
+
+        if (chamado == null){
+            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
+        }
+
+        chamado.setStatus(StatusEnum.INATIVO);
+
+        chamadoRepository.save(chamado);
+    }
+
+    /////////////////////////////////////
+    /// PRIVATE METHODS
+    /////////////////////////////////////
+
+    private ChamadoDTO convertForChamadoDTO(ChamadoModel chamado) {
+        return ChamadoDTO.builder()
+                .titulo(chamado.getTitulo())
+                .status(chamado.getStatus())
+                .prioridade(chamado.getPrioridade())
+                .solicitante(chamado.getSolicitante())
+                .build();
     }
 }
