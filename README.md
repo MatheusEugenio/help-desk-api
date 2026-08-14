@@ -91,7 +91,7 @@ INATIVO
       "email": "joaosilva12@gmail.com"
                 },
   "prioridade": "ALTA",
-  "status: "ABERTO"
+  "status": "ABERTO"
 }
 ```
 
