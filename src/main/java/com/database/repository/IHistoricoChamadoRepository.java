@@ -1,4 +1,7 @@
 package com.database.repository;
 
-public interface IHistoricoChamadoRepository {
+import com.database.model.HistoricoChamadoModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IHistoricoChamadoRepository extends JpaRepository<HistoricoChamadoModel, Long> {
 }
