@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -51,4 +53,8 @@ public class ChamadoModel {
     @NotNull
     @JoinColumn(name = "solicitante_id", nullable = false)
     private UsuarioModel solicitante;
+
+    @OneToMany(mappedBy = "chamado")
+    List<HistoricoChamadoModel> historicos;
+
 }
