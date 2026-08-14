@@ -36,6 +36,9 @@ EM_ATENDIMENTO
    │
    ▼
 FECHADO
+   │
+   ▼
+INATIVO
 ```
 
 ---
