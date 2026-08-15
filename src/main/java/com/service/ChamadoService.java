@@ -62,6 +62,7 @@ public class ChamadoService {
         return convertForChamadoDTO(chamado);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ChamadoDTO updatePrioridadeChamado(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
@@ -79,13 +80,28 @@ public class ChamadoService {
             throw new CallInactiveException("Impossível alterar prioridade, chamado já está inativo!");
         }
 
+        var valorAnterior = chamado.getStatus().toString();
+
         chamado.setPrioridade(prioridade);
 
         chamadoRepository.save(chamado);
 
+        HistoricoChamadoModel historico = HistoricoChamadoModel.builder()
+                .tipoAlteracao("ATUALIZAÇÃO NA PRIORIADADE")
+                .valorAnterior(valorAnterior)
+                .novoValor(chamado.getPrioridade().toString())
+                .chamado(chamado)
+                .autor(chamado.getSolicitante())
+                .build();
+
+        chamado.getHistoricos().add(historico);
+
+        historicoRepository.save(historico);
+
         return convertForChamadoDTO(chamado);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ChamadoDTO updateStatusChamado(Long id, StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
@@ -103,25 +119,54 @@ public class ChamadoService {
             throw new CallInactiveException("Impossível alterar status, chamado já está inativo!");
         }
 
+        var valorAnterior = chamado.getStatus().toString();
+
         chamado.setStatus(status);
 
         chamadoRepository.save(chamado);
 
+        HistoricoChamadoModel historico = HistoricoChamadoModel.builder()
+                .tipoAlteracao("ATUALIZAÇÃO NA PRIORIADADE")
+                .valorAnterior(valorAnterior)
+                .novoValor(chamado.getStatus().toString())
+                .chamado(chamado)
+                .autor(chamado.getSolicitante())
+                .build();
+
+        chamado.getHistoricos().add(historico);
+
+        historicoRepository.save(historico);
+
         return convertForChamadoDTO(chamado);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void inativarChamado(Long id) throws NotFoundException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElse(null);
 
-        if (chamado == null){
-            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
+        if (chamado == null) {
+            throw new NotFoundException("Chamado com id = " + id + " não encontrado");
         }
+
+        var valorAnterior = chamado.getStatus().toString();
 
         chamado.setStatus(StatusEnum.INATIVO);
 
         chamadoRepository.save(chamado);
+
+        HistoricoChamadoModel historico = HistoricoChamadoModel.builder()
+                .tipoAlteracao("INATIVAÇÃO")
+                .valorAnterior(valorAnterior)
+                .novoValor(chamado.getStatus().toString())
+                .chamado(chamado)
+                .autor(chamado.getSolicitante())
+                .build();
+
+        chamado.getHistoricos().add(historico);
+
+        historicoRepository.save(historico);
     }
 
     /////////////////////////////////////
