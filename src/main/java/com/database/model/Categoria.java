@@ -21,7 +21,4 @@ public class Categoria {
     @NotBlank
     @Column(nullable = false, length = 50, name = "nome_categoria")
     private String nomeCategoria;
-
-    @Column
-    private Boolean ativa;
 }
