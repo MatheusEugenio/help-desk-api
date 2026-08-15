@@ -40,9 +40,11 @@ public class ChamadoService {
 
         chamado = ChamadoModel.builder()
                 .titulo(chamadoDTO.getTitulo())
+                .descricao(chamadoDTO.getDescricao())
                 .status(StatusEnum.ABERTO)
                 .prioridade(chamadoDTO.getPrioridade())
                 .solicitante(chamadoDTO.getSolicitante())
+                .categoria(chamadoDTO.getCategoria())
                 .build();
 
         chamadoRepository.save(chamado);
