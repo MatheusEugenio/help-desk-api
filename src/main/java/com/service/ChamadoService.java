@@ -40,7 +40,7 @@ public class ChamadoService {
 
         chamado = ChamadoModel.builder()
                 .titulo(chamadoDTO.getTitulo())
-                .status(chamadoDTO.getStatus())
+                .status(StatusEnum.ABERTO)
                 .prioridade(chamadoDTO.getPrioridade())
                 .solicitante(chamadoDTO.getSolicitante())
                 .build();
