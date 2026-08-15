@@ -2,6 +2,7 @@ package com.database.model;
 
 import com.database.enums.PapelUsuarioEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -25,7 +26,8 @@ public class UsuarioModel {
     private String nome;
 
     @NotBlank
-    @Column(length = 40, nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
+    @Email(message = "formato de email inválido")
     private String email;
 
     @Enumerated(EnumType.STRING)
