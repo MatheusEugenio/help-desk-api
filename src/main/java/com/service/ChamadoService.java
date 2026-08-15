@@ -63,7 +63,7 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ChamadoDTO updatePrioridadeChamado(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ChamadoDTO updatePrioridade(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElse(null);
@@ -102,7 +102,7 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ChamadoDTO updateStatusChamado(Long id, StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ChamadoDTO updateStatus(Long id, StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElse(null);

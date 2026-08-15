@@ -40,13 +40,13 @@ public class ChamadoController {
     @PatchMapping(value = "/{id}/{prioridade}")
     @ResponseStatus(HttpStatus.OK)
     public ChamadoDTO updatePrioridadeChamado(@Valid @PathVariable("id") Long id, @Valid @PathVariable ("prioridade") PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
-        return chamadoService.updatePrioridadeChamado(id, prioridade);
+        return chamadoService.updatePrioridade(id, prioridade);
     }
 
     @PatchMapping(value = "/{id}/{status}")
     @ResponseStatus(HttpStatus.OK)
     public ChamadoDTO updateStatusChamado(@Valid @PathVariable ("id") Long id, @Valid @PathVariable ("status") StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
-        return chamadoService.updateStatusChamado(id, status);
+        return chamadoService.updateStatus(id, status);
     }
 
     @DeleteMapping(value = "/{id}/delete")
