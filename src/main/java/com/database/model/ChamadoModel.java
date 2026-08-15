@@ -43,11 +43,8 @@ public class ChamadoModel {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
+    @NotNull
     private Categoria categoria;
-
-    @ManyToOne
-    @JoinColumn(name = "atendente_id")
-    private UsuarioModel atendente;
 
     @ManyToOne
     @NotNull
