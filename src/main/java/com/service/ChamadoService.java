@@ -178,8 +178,8 @@ public class ChamadoService {
     private ChamadoDTO convertForChamadoDTO(ChamadoModel chamado) {
         return ChamadoDTO.builder()
                 .titulo(chamado.getTitulo())
+                .descricao(chamado.getDescricao())
                 .status(chamado.getStatus())
-                .prioridade(chamado.getPrioridade())
                 .solicitante(chamado.getSolicitante())
                 .build();
     }
