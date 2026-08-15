@@ -23,9 +23,6 @@ public class ChamadoDTO {
     private String descricao;
 
     @NotNull
-    private PrioridadeEnum prioridade;
-
-    @NotNull
     private StatusEnum status;
 
     @NotNull

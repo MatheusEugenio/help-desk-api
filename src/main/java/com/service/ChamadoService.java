@@ -42,7 +42,7 @@ public class ChamadoService {
                 .titulo(chamadoDTO.getTitulo())
                 .descricao(chamadoDTO.getDescricao())
                 .status(StatusEnum.ABERTO)
-                .prioridade(chamadoDTO.getPrioridade())
+                .prioridade(PrioridadeEnum.BAIXA)
                 .solicitante(chamadoDTO.getSolicitante())
                 .categoria(chamadoDTO.getCategoria())
                 .build();
