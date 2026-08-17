@@ -24,12 +24,11 @@ public class ChamadoDTO {
 
     private PrioridadeEnum prioridade;
 
-    @NotNull
     private StatusEnum status;
 
     @NotNull
-    private Categoria categoria;
+    private Long idCategoria;
 
     @NotNull
-    private UsuarioModel solicitante;
+    private Long idSolicitante;
 }
