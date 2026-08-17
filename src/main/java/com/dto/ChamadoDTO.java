@@ -1,8 +1,6 @@
 package com.dto;
 
 import com.database.enums.PrioridadeEnum;
-import com.database.model.Categoria;
-import com.database.model.UsuarioModel;
 import com.database.enums.StatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
