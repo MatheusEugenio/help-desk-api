@@ -1,12 +1,17 @@
 package com.service;
 
+import com.database.model.Categoria;
 import com.database.model.ChamadoModel;
 import com.database.enums.PrioridadeEnum;
 import com.database.enums.StatusEnum;
 import com.database.model.HistoricoChamadoModel;
+import com.database.model.UsuarioModel;
+import com.database.repository.ICategoriaRepository;
 import com.database.repository.IChamadoRepository;
 import com.database.repository.IHistoricoChamadoRepository;
+import com.database.repository.IUsuarioRepository;
 import com.dto.ChamadoDTO;
+import com.dto.ResponseChamadoDTO;
 import com.exception.AlreadyExistsException;
 import com.exception.CallCompletedException;
 import com.exception.CallInactiveException;
@@ -23,13 +28,13 @@ public class ChamadoService {
 
     private final IChamadoRepository chamadoRepository;
     private final IHistoricoChamadoRepository historicoRepository;
+    private final IUsuarioRepository usuarioRepository;
+    private final ICategoriaRepository categoriaRepository;
 
-    public List<ChamadoModel> findAll(){
-        return chamadoRepository.findAll();
-    }
+    public List<ChamadoModel> findAll(){return chamadoRepository.findAll();}
 
     @Transactional(rollbackFor = Exception.class)
-    public ChamadoDTO createdChamado(ChamadoDTO chamadoDTO) throws AlreadyExistsException {
+    public ResponseChamadoDTO createdChamado(ChamadoDTO chamadoDTO) throws AlreadyExistsException, NotFoundException {
 
         ChamadoModel chamado = chamadoRepository.findByTitulo(chamadoDTO.getTitulo())
                 .orElse(null);
@@ -38,13 +43,27 @@ public class ChamadoService {
             throw new AlreadyExistsException("Já existe chamado com o mesmo título!");
         }
 
+        UsuarioModel solicitante = usuarioRepository.findById(chamadoDTO.getIdSolicitante())
+                .orElse(null);
+
+        if (solicitante == null) {
+            throw new NotFoundException("Usuario com ID = "+chamadoDTO.getIdSolicitante()+" não encontrado");
+        }
+
+        Categoria categoria = categoriaRepository.findById(chamadoDTO.getIdCategoria())
+                .orElse(null);
+
+        if (categoria == null) {
+            throw new NotFoundException("Categoria com ID = "+chamadoDTO.getIdCategoria()+" não encontrada");
+        }
+
         chamado = ChamadoModel.builder()
                 .titulo(chamadoDTO.getTitulo())
                 .descricao(chamadoDTO.getDescricao())
                 .status(StatusEnum.ABERTO)
                 .prioridade(PrioridadeEnum.BAIXA)
-                .solicitante(chamadoDTO.getSolicitante())
-                .categoria(chamadoDTO.getCategoria())
+                .solicitante(solicitante)
+                .categoria(categoria)
                 .build();
 
         chamadoRepository.save(chamado);
@@ -65,7 +84,7 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ChamadoDTO updatePrioridade(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updatePrioridade(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElse(null);
@@ -104,7 +123,7 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ChamadoDTO updateStatus(Long id, StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updateStatus(Long id, StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElse(null);
@@ -175,12 +194,14 @@ public class ChamadoService {
     /// PRIVATE METHODS
     /////////////////////////////////////
 
-    private ChamadoDTO convertForChamadoDTO(ChamadoModel chamado) {
-        return ChamadoDTO.builder()
+    private ResponseChamadoDTO convertForChamadoDTO(ChamadoModel chamado) {
+        return ResponseChamadoDTO.builder()
                 .titulo(chamado.getTitulo())
                 .descricao(chamado.getDescricao())
+                .prioridade(chamado.getPrioridade())
                 .status(chamado.getStatus())
-                .solicitante(chamado.getSolicitante())
+                .nomeCategoria(chamado.getNomeCategoria())
+                .nomeSolicitante(chamado.getNomeSolicitane())
                 .build();
     }
 }
