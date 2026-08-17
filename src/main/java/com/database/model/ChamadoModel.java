@@ -24,7 +24,7 @@ public class ChamadoModel {
     private Long id;
 
     @NotBlank
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String titulo;
 
     @NotBlank
@@ -54,4 +54,11 @@ public class ChamadoModel {
     @OneToMany(mappedBy = "chamado")
     List<HistoricoChamadoModel> historicos;
 
+    public String getNomeSolicitane() {
+        return solicitante.getNome();
+    }
+
+    public String getNomeCategoria() {
+        return categoria.getNomeCategoria();
+    }
 }
