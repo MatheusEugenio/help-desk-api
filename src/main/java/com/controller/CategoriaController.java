@@ -1,7 +1,6 @@
 package com.controller;
 
 import com.database.model.Categoria;
-import com.dto.ResponseChamadoDTO;
 import com.exception.NotFoundException;
 import com.service.CategoriaService;
 import jakarta.validation.Valid;
