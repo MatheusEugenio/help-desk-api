@@ -23,9 +23,9 @@ public class CategoriaController {
     @ResponseStatus(HttpStatus.OK)
     public List<Categoria> findAll() {return categoriaService.findAll();}
 
-    @GetMapping("/id-chamado/{id}")
+    @GetMapping("/id-categoria/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Categoria viewChamadoByID(@Valid @PathVariable Long id) throws NotFoundException {
+    public Categoria viewCategoriaByID(@Valid @PathVariable Long id) throws NotFoundException {
         return categoriaService.findById(id);
     }
 
