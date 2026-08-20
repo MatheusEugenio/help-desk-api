@@ -38,21 +38,27 @@ public class ChamadoController {
         return chamadoService.createdChamado(chamadoDTO);
     }
 
-    @PatchMapping(value = "/{id}/{prioridade}")
+    @GetMapping("/id-chamado/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO updatePrioridadeChamado(@Valid @PathVariable("id") Long id, @Valid @PathVariable ("prioridade") PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO viewChamadoByID(@Valid @PathVariable Long id) throws NotFoundException {
+        return chamadoService.findByID(id);
+    }
+
+    @PatchMapping(value = "/id-chamado/{id}/nova-prioridade/{prioridade}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseChamadoDTO updatePrioridadeChamado(@Valid @PathVariable Long id, @Valid @PathVariable PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
         return chamadoService.updatePrioridade(id, prioridade);
     }
 
-    @PatchMapping(value = "/{id}/{status}")
+    @PatchMapping(value = "/id-chamado/{id}/novo-status/{status}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable ("id") Long id, @Valid @PathVariable ("status") StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable Long id, @Valid @PathVariable StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
         return chamadoService.updateStatus(id, status);
     }
 
-    @DeleteMapping(value = "/{id}/delete")
+    @DeleteMapping(value = "/delete/id-chamado/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativarChamado(@Valid @PathVariable("id") Long id) throws NotFoundException {
+    public void inativarChamado(@Valid @PathVariable Long id) throws NotFoundException {
         chamadoService.inativarChamado(id);
     }
 
