@@ -16,9 +16,11 @@ import com.exception.AlreadyExistsException;
 import com.exception.CallCompletedException;
 import com.exception.CallInactiveException;
 import com.exception.NotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -32,6 +34,17 @@ public class ChamadoService {
     private final ICategoriaRepository categoriaRepository;
 
     public List<ChamadoModel> findAll(){return chamadoRepository.findAll();}
+
+    public ResponseChamadoDTO findByID(@Valid @PathVariable Long id) throws NotFoundException {
+        ChamadoModel chamado = chamadoRepository.findById(id)
+                .orElse(null);
+
+        if (chamado == null){
+            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
+        }
+
+        return convertForChamadoDTO(chamado);
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseChamadoDTO createdChamado(ChamadoDTO chamadoDTO) throws AlreadyExistsException, NotFoundException {
