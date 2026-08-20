@@ -1,6 +1,7 @@
 package com.handler;
 
 import com.exception.*;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +31,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorReponse);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorReponse> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
+        ErrorReponse errorReponse = ErrorReponse.builder()
+                .mensagem(ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorReponse);
+    }
+
     @ExceptionHandler(CallCompletedException.class)
     public ResponseEntity<ErrorReponse> CallCompletedExceptionHandler(CallCompletedException ex) {
         ErrorReponse errorReponse = ErrorReponse.builder()
@@ -50,13 +61,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorReponse);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorReponse> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    public ResponseEntity<ErrorReponse> OptimisticLockingFailureExceptionHandler(OptimisticLockingFailureException ex) {
         ErrorReponse errorReponse = ErrorReponse.builder()
                 .mensagem(ex.getMessage())
-                .status(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.NO_CONTENT.value())
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorReponse);
     }
+
 }
