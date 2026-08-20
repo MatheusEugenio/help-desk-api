@@ -26,6 +26,13 @@ public class UsuarioController {
     @ResponseStatus(HttpStatus.OK)
     public List<UsuarioModel> findAll() {return usuarioService.findAll();}
 
+    @GetMapping("/id-usuario/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UsuarioDTO viewUsuarioByID(@Valid @PathVariable Long id) throws NotFoundException {
+        return usuarioService.findById(id);
+    }
+
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioDTO createdUsuario(@Valid @RequestBody UsuarioDTO usuario) throws AlreadyExistsException {

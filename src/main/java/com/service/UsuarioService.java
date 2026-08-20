@@ -19,6 +19,16 @@ public class UsuarioService {
 
     public List<UsuarioModel> findAll() {return usuarioRepository.findAll();}
 
+    public UsuarioDTO findById(Long id) throws NotFoundException {
+        UsuarioModel usuario = usuarioRepository.findById(id)
+                .orElse(null);
+
+        if  (usuario == null) {
+            throw new NotFoundException("Usuario com id ="+id+" não encontrado");
+        }
+
+        return convertForUsuarioDTO(usuario);
+    }
     public UsuarioDTO createdUsuario(UsuarioDTO usuarioDTO) throws AlreadyExistsException {
 
         UsuarioModel usuario = usuarioRepository.findByEmail(usuarioDTO.getEmail())
