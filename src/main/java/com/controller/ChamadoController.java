@@ -3,6 +3,7 @@ package com.controller;
 import com.database.enums.PrioridadeEnum;
 import com.database.enums.StatusEnum;
 import com.database.model.ChamadoModel;
+import com.database.model.HistoricoChamadoModel;
 import com.dto.ChamadoDTO;
 import com.dto.ResponseChamadoDTO;
 import com.exception.AlreadyExistsException;
@@ -42,6 +43,12 @@ public class ChamadoController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseChamadoDTO viewChamadoByID(@Valid @PathVariable Long id) throws NotFoundException {
         return chamadoService.findByID(id);
+    }
+
+    @PutMapping("/historico/id-chamado/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<HistoricoChamadoModel> historicoChamadoFindById(@Valid @PathVariable Long id) throws NotFoundException {
+        return chamadoService.historicoChamadoFindByID(id);
     }
 
     @PatchMapping(value = "/id-chamado/{id}/nova-prioridade/{prioridade}")

@@ -35,6 +35,17 @@ public class ChamadoService {
 
     public List<ChamadoModel> findAll(){return chamadoRepository.findAll();}
 
+    public List<HistoricoChamadoModel> historicoChamadoFindByID(Long id) throws NotFoundException {
+        ChamadoModel chamado = chamadoRepository.findById(id)
+                .orElse(null);
+
+        if (chamado == null){
+            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
+        }
+
+        return chamado.getHistoricos();
+    }
+
     public ResponseChamadoDTO findByID(@Valid @PathVariable Long id) throws NotFoundException {
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElse(null);
