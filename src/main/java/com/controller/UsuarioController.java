@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/usuario")
+@RequestMapping("v1/usuarios")
 @Validated
 @RequiredArgsConstructor
 public class UsuarioController {
