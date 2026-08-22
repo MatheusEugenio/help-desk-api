@@ -33,7 +33,11 @@ public class ChamadoService {
     private final IUsuarioRepository usuarioRepository;
     private final ICategoriaRepository categoriaRepository;
 
-    public List<ChamadoModel> findAll(){return chamadoRepository.findAll();}
+    public List<ResponseChamadoDTO> findAll(){
+        return chamadoRepository.findAll().stream()
+                .map(this::convertForResponseChamado)
+                .toList();
+    }
 
     public List<HistoricoChamadoModel> historicoChamadoFindByID(Long id) throws NotFoundException {
         ChamadoModel chamado = chamadoRepository.findById(id)
@@ -219,6 +223,17 @@ public class ChamadoService {
     /////////////////////////////////////
 
     private ResponseChamadoDTO convertForChamadoDTO(ChamadoModel chamado) {
+        return ResponseChamadoDTO.builder()
+                .titulo(chamado.getTitulo())
+                .descricao(chamado.getDescricao())
+                .prioridade(chamado.getPrioridade())
+                .status(chamado.getStatus())
+                .nomeCategoria(chamado.getNomeCategoria())
+                .nomeSolicitante(chamado.getNomeSolicitane())
+                .build();
+    }
+
+    private ResponseChamadoDTO convertForResponseChamado(ChamadoModel chamado) {
         return ResponseChamadoDTO.builder()
                 .titulo(chamado.getTitulo())
                 .descricao(chamado.getDescricao())
