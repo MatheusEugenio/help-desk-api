@@ -10,6 +10,7 @@ import com.database.repository.ICategoriaRepository;
 import com.database.repository.IChamadoRepository;
 import com.database.repository.IHistoricoChamadoRepository;
 import com.database.repository.IUsuarioRepository;
+import com.database.specifications.ChamadoSpecification;
 import com.dto.ChamadoDTO;
 import com.dto.ResponseChamadoDTO;
 import com.exception.AlreadyExistsException;
@@ -18,6 +19,7 @@ import com.exception.CallInactiveException;
 import com.exception.NotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,8 +35,18 @@ public class ChamadoService {
     private final IUsuarioRepository usuarioRepository;
     private final ICategoriaRepository categoriaRepository;
 
-    public List<ResponseChamadoDTO> findAll(){
-        return chamadoRepository.findAll().stream()
+    public List<ResponseChamadoDTO> findAll(StatusEnum status,
+                                            PrioridadeEnum prioridade,
+                                            Long idCategoria,
+                                            Long idSolicitante){
+
+        Specification<ChamadoModel> filtro = Specification
+                .where(ChamadoSpecification.porStatus(status))
+                .and(ChamadoSpecification.porPrioridade(prioridade))
+                .and(ChamadoSpecification.porCategoria(idCategoria))
+                .and(ChamadoSpecification.porSolicitante(idSolicitante));
+
+        return chamadoRepository.findAll(filtro).stream()
                 .map(this::convertForResponseChamado)
                 .toList();
     }
