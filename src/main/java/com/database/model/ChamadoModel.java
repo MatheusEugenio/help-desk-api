@@ -54,6 +54,10 @@ public class ChamadoModel {
     @OneToMany(mappedBy = "chamado")
     List<HistoricoChamadoModel> historicos;
 
+    @ManyToOne
+    @JoinColumn(name = "atendente_id")
+    private UsuarioModel atendente;
+
     public String getNomeSolicitane() {
         return solicitante.getNome();
     }
