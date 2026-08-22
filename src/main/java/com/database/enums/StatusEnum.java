@@ -2,7 +2,7 @@ package com.database.enums;
 
 public enum StatusEnum {
     ABERTO,
-    EM_ATENDIMENTO,
+    EM_ANDAMENTO,
     FINALIZADO,
     INATIVO,
 }
