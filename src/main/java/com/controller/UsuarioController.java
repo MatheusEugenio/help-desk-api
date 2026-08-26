@@ -24,7 +24,9 @@ public class UsuarioController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UsuarioModel> findAll() {return usuarioService.findAll();}
+    public List<UsuarioModel> findAll(@RequestParam(name = "letra", required = false) String letraInicial) {
+        return usuarioService.findAll(letraInicial);
+    }
 
     @GetMapping("/id-usuario/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -32,6 +34,11 @@ public class UsuarioController {
         return usuarioService.findById(id);
     }
 
+    @GetMapping("/email/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public UsuarioDTO viewUsuarioByEmail(@Valid @PathVariable String email) throws NotFoundException {
+        return usuarioService.findByEmail(email);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
