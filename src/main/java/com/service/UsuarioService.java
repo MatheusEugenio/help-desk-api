@@ -3,10 +3,12 @@ package com.service;
 import com.database.enums.PapelUsuarioEnum;
 import com.database.model.UsuarioModel;
 import com.database.repository.IUsuarioRepository;
+import com.database.specifications.UsuarioSpecification;
 import com.dto.UsuarioDTO;
 import com.exception.AlreadyExistsException;
 import com.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +19,14 @@ public class UsuarioService {
 
     private final IUsuarioRepository usuarioRepository;
 
-    public List<UsuarioModel> findAll() {return usuarioRepository.findAll();}
+    public List<UsuarioModel> findAll(String letraInicial) {
+
+        Specification<UsuarioModel> filtro = Specification
+                .where(UsuarioSpecification.byInitialLetter(letraInicial));
+
+        return usuarioRepository.findAll(filtro).stream()
+                .toList();
+    }
 
     public UsuarioDTO findById(Long id) throws NotFoundException {
         UsuarioModel usuario = usuarioRepository.findById(id)
@@ -29,6 +38,19 @@ public class UsuarioService {
 
         return convertForUsuarioDTO(usuario);
     }
+
+    public UsuarioDTO findByEmail(String email) throws NotFoundException {
+
+        UsuarioModel usuario = usuarioRepository.findByEmail(email)
+                .orElse(null);
+
+        if (usuario == null){
+            throw new NotFoundException("Não existe um usuário com esse email");
+        }
+
+        return convertForUsuarioDTO(usuario);
+    }
+
     public UsuarioDTO createdUsuario(UsuarioDTO usuarioDTO) throws AlreadyExistsException {
 
         UsuarioModel usuario = usuarioRepository.findByEmail(usuarioDTO.getEmail())
