@@ -41,10 +41,10 @@ public class ChamadoService {
                                             Long idSolicitante){
 
         Specification<ChamadoModel> filtro = Specification
-                .where(ChamadoSpecification.porStatus(status))
-                .and(ChamadoSpecification.porPrioridade(prioridade))
-                .and(ChamadoSpecification.porCategoria(idCategoria))
-                .and(ChamadoSpecification.porSolicitante(idSolicitante));
+                .where(ChamadoSpecification.byStatus(status))
+                .and(ChamadoSpecification.byPrioridade(prioridade))
+                .and(ChamadoSpecification.byCategoria(idCategoria))
+                .and(ChamadoSpecification.bySolicitante(idSolicitante));
 
         return chamadoRepository.findAll(filtro).stream()
                 .map(this::convertForResponseChamado)

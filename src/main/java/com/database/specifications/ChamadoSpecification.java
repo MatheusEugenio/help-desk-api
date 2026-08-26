@@ -7,7 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ChamadoSpecification {
 
-    public static Specification<ChamadoModel> porStatus(StatusEnum statusParam){
+    public static Specification<ChamadoModel> byStatus(StatusEnum statusParam){
         return (root, query, cb) -> {
             if (statusParam == null){return null;}
 
@@ -15,7 +15,7 @@ public class ChamadoSpecification {
         };
     }
 
-    public static Specification<ChamadoModel> porPrioridade(PrioridadeEnum prioridadeParam){
+    public static Specification<ChamadoModel> byPrioridade(PrioridadeEnum prioridadeParam){
         return (root, query, cb) -> {
             if (prioridadeParam == null){return null;}
 
@@ -23,7 +23,7 @@ public class ChamadoSpecification {
         };
     }
 
-    public static Specification<ChamadoModel> porCategoria(Long idCategoria){
+    public static Specification<ChamadoModel> byCategoria(Long idCategoria){
         return (root, query, cb) -> {
             if (idCategoria == null){return null;}
 
@@ -31,7 +31,7 @@ public class ChamadoSpecification {
         };
     }
 
-    public static Specification<ChamadoModel> porSolicitante(Long idSolicitante){
+    public static Specification<ChamadoModel> bySolicitante(Long idSolicitante){
         return (root, query, cb) -> {
             if (idSolicitante == null){return null;}
 
