@@ -126,11 +126,11 @@ src
 - [x] Tratamento global de exceções
 - [x] Documentação com Swagger
 - [ ] Bean Validation
-- [ ] Busca por ID
-- [ ] Persistência com Spring Data JPA
+- [x] Busca por ID
+- [x] Persistência com Spring Data JPA
 - [ ] Banco H2
-- [ ] PostgreSQL
-- [ ] Relacionamento entre entidades
+- [x] PostgreSQL
+- [x] Relacionamento entre entidades
 - [ ] Spring Security
 - [ ] JWT
 - [ ] Testes unitários
