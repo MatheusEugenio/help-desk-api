@@ -108,7 +108,8 @@ src
         ├── database
         │   ├── enums
         │   ├── model
-        │   └── repository
+        │   ├── repository
+        │   └── specifications
         ├── dto
         ├── exception
         ├── handler
