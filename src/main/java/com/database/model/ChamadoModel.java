@@ -52,7 +52,7 @@ public class ChamadoModel {
     private UsuarioModel solicitante;
 
     @OneToMany(mappedBy = "chamado")
-    List<HistoricoChamadoModel> historicos;
+    List<HistoricoChamadoModel> historico;
 
     @ManyToOne
     @JoinColumn(name = "atendente_id")
