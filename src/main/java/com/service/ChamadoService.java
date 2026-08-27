@@ -59,7 +59,7 @@ public class ChamadoService {
             throw new NotFoundException("Chamado com id = "+id+" não encontrado");
         }
 
-        return chamado.getHistoricos();
+        return chamado.getHistorico();
     }
 
     public ResponseChamadoDTO findByID(@Valid @PathVariable Long id) throws NotFoundException {
@@ -116,7 +116,7 @@ public class ChamadoService {
                 .autor(chamado.getSolicitante())
                 .build();
 
-        chamado.getHistoricos().add(historico);
+        chamado.getHistorico().add(historico);
 
         historicoRepository.save(historico);
 
@@ -155,7 +155,7 @@ public class ChamadoService {
                 .autor(chamado.getSolicitante())
                 .build();
 
-        chamado.getHistoricos().add(historico);
+        chamado.getHistorico().add(historico);
 
         historicoRepository.save(historico);
 
@@ -194,7 +194,7 @@ public class ChamadoService {
                 .autor(chamado.getSolicitante())
                 .build();
 
-        chamado.getHistoricos().add(historico);
+        chamado.getHistorico().add(historico);
 
         historicoRepository.save(historico);
 
@@ -225,7 +225,7 @@ public class ChamadoService {
                 .autor(chamado.getSolicitante())
                 .build();
 
-        chamado.getHistoricos().add(historico);
+        chamado.getHistorico().add(historico);
 
         historicoRepository.save(historico);
     }
