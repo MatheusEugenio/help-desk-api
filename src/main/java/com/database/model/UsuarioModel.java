@@ -35,4 +35,6 @@ public class UsuarioModel {
     @Column(nullable = false)
     private PapelUsuarioEnum papel;
 
+    private Boolean inativo;
+
 }
