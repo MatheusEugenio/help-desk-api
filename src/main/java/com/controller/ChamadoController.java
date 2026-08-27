@@ -43,25 +43,25 @@ public class ChamadoController {
 
     @GetMapping("/{id_chamado}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO viewChamadoByID(@Valid @PathVariable Long idChamado) throws NotFoundException {
+    public ResponseChamadoDTO viewChamadoByID(@Valid @PathVariable("id_chamado") Long idChamado) throws NotFoundException {
         return chamadoService.findByID(idChamado);
     }
 
-    @GetMapping("/{id_historico}")
+    @GetMapping("/{id_chamado}/historico")
     @ResponseStatus(HttpStatus.OK)
-    public List<HistoricoChamadoModel> historicoChamadoFindById(@Valid @PathVariable Long idHistorico) throws NotFoundException {
-        return chamadoService.historicoChamadoFindByID(idHistorico);
+    public List<HistoricoChamadoModel> viewHistoricoByIdChamado(@Valid @PathVariable("id_chamado") Long idChamado) throws NotFoundException {
+        return chamadoService.historicoChamadoFindByID(idChamado);
     }
 
     @PatchMapping(value = "/{id_chamado}/{prioridade}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO updatePrioridadeChamado(@Valid @PathVariable Long idChamado, @Valid @PathVariable PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updatePrioridadeChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
         return chamadoService.updatePrioridade(idChamado, prioridade);
     }
 
     @PatchMapping(value = "/{id_chamado}/{status}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable Long idChamado, @Valid @PathVariable StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
         return chamadoService.updateStatus(idChamado, status);
     }
 
