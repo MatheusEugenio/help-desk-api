@@ -124,6 +124,50 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    public void assignAtendente(Long idChamado, Long idAtendente) throws NotFoundException, CallInactiveException {
+
+        UsuarioModel atendente = usuarioRepository.findById(idAtendente)
+                .orElse(null);
+
+        if (atendente == null) {
+            throw new NotFoundException("Este atendente não existe");
+        }
+
+        // LÓGICA DE VERIFICAÇÃO DE ATENDENTE ATIVO
+
+        ChamadoModel chamado = chamadoRepository.findById(idChamado)
+                .orElse(null);
+
+        if (chamado == null) {
+            throw new NotFoundException("O chamado não existe ");
+        }
+
+        if (chamado.getStatus().equals(StatusEnum.INATIVO)) {
+            throw new CallInactiveException("Chamado inativo");
+        }
+
+        var atendenteAnterior = chamado.getAtendente();
+
+        chamado.setAtendente(atendente);
+
+        chamadoRepository.save(chamado);
+
+        HistoricoChamadoModel historico = HistoricoChamadoModel.builder()
+                .tipoAlteracao("Atribuição de Atendente")
+                .valorAnterior(atendenteAnterior.getNome())
+                .novoValor(chamado.getAtendente().getNome())
+                .chamado(chamado)
+                .autor(chamado.getSolicitante())
+                .build();
+
+        chamado.getHistorico().add(historico);
+
+        historicoRepository.save(historico);
+    }
+
+    public void fecharChamado(){}
+
+    @Transactional(rollbackFor = Exception.class)
     public ResponseChamadoDTO updatePrioridade(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
