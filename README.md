@@ -125,7 +125,7 @@ src
 - [x] DTO
 - [x] Tratamento global de exceções
 - [x] Documentação com Swagger
-- [ ] Bean Validation
+- [x] Bean Validation
 - [x] Busca por ID
 - [x] Persistência com Spring Data JPA
 - [ ] Banco H2
