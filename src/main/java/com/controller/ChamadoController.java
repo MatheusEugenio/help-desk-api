@@ -68,7 +68,7 @@ public class ChamadoController {
         return chamadoService.updatePrioridade(idChamado, prioridade);
     }
 
-    @PatchMapping(value = "/{id_chamado}/{status}")
+    @PatchMapping("/{id_chamado}/{status}/status")
     @ResponseStatus(HttpStatus.OK)
     public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
         return chamadoService.updateStatus(idChamado, status);
