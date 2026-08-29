@@ -157,9 +157,32 @@ public class ChamadoService {
                 .autor(chamado.getSolicitante())
                 .build();
 
-        chamado.getHistorico().add(historico);
+    public ResponseChamadoDTO finishChamado(Long idChamado) throws NotFoundException, CallInactiveException, CallCompletedException {
 
-        historicoRepository.save(historico);
+        ChamadoModel chamado = chamadoRepository.findById(idChamado)
+                .orElse(null);
+
+        if (chamado == null){
+            throw new NotFoundException("Chamado com id = "+idChamado+" não encontrado");
+        }
+
+        if (chamado.getStatus().equals(StatusEnum.INATIVO)) {
+            throw new CallInactiveException("O chamado não pode estar inativo");
+        }
+
+        if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
+            throw new CallCompletedException("O chamado já foi finalizado");
+        }
+
+        var valorAnterior = chamado.getStatus();
+
+        chamado.setStatus(StatusEnum.FINALIZADO);
+
+        chamadoRepository.save(chamado);
+
+        persistInHistoricoChamado(valorAnterior.toString(), "CHAMADO FINALIZADO", chamado.getStatus().toString(), chamado);
+
+        return convertForResponseChamado(chamado);
     }
 
     public void fecharChamado(){}
@@ -196,11 +219,28 @@ public class ChamadoService {
                 .autor(chamado.getSolicitante())
                 .build();
 
-        chamado.getHistorico().add(historico);
+    public ResponseChamadoDTO reopenChamado(Long idChamado) throws NotFoundException, CallNotCompletedException {
 
-        historicoRepository.save(historico);
+        ChamadoModel chamado = chamadoRepository.findById(idChamado)
+                .orElse(null);
 
-        return convertForChamadoDTO(chamado);
+        if (chamado == null){
+            throw new NotFoundException("Chamado com id = "+idChamado+" não encontrado");
+        }
+
+        if (!chamado.getStatus().equals(StatusEnum.FINALIZADO)){
+            throw new CallNotCompletedException("O chamado precisa estar obrigatoriamente finalizado para a reabertura");
+        }
+
+        var statusAnterior = chamado.getStatus();
+
+        chamado.setStatus(StatusEnum.ABERTO);
+
+        chamadoRepository.save(chamado);
+
+        persistInHistoricoChamado(statusAnterior.toString(), "REABERTURA DO CHAMADO", chamado.getStatus().toString(), chamado);
+
+        return convertForResponseChamado(chamado);
     }
 
     @Transactional(rollbackFor = Exception.class)
