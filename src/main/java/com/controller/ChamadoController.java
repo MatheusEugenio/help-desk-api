@@ -5,10 +5,7 @@ import com.database.enums.StatusEnum;
 import com.database.model.HistoricoChamadoModel;
 import com.dto.ChamadoDTO;
 import com.dto.ResponseChamadoDTO;
-import com.exception.AlreadyExistsException;
-import com.exception.CallCompletedException;
-import com.exception.CallInactiveException;
-import com.exception.NotFoundException;
+import com.exception.*;
 import com.service.ChamadoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +72,10 @@ public class ChamadoController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativarChamado(@Valid @PathVariable Long id) throws NotFoundException {
         chamadoService.inativarChamado(id);
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseChamadoDTO finishChamado(@Valid @PathVariable Long id) throws NotFoundException, CallInactiveException, CallCompletedException {
+        return chamadoService.finishChamado(id);
     }
 
 }
