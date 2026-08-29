@@ -68,6 +68,16 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NO_CONTENT.value())
                 .build();
 
+        return ResponseEntity.status(HttpStatus.NO_CONTENT.value()).body(errorReponse);
+    }
+
+    @ExceptionHandler(CallNotCompletedException.class)
+    public ResponseEntity<ErrorReponse> CallNotCompletedExceptionHandler(CallNotCompletedException ex) {
+        ErrorReponse errorReponse = ErrorReponse.builder()
+                .mensagem(ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorReponse);
     }
 
