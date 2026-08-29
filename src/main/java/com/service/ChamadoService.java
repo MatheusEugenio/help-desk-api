@@ -13,10 +13,7 @@ import com.database.repository.IUsuarioRepository;
 import com.database.specifications.ChamadoSpecification;
 import com.dto.ChamadoDTO;
 import com.dto.ResponseChamadoDTO;
-import com.exception.AlreadyExistsException;
-import com.exception.CallCompletedException;
-import com.exception.CallInactiveException;
-import com.exception.NotFoundException;
+import com.exception.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -289,14 +286,18 @@ public class ChamadoService {
                 .build();
     }
 
-    private ResponseChamadoDTO convertForResponseChamado(ChamadoModel chamado) {
-        return ResponseChamadoDTO.builder()
-                .titulo(chamado.getTitulo())
-                .descricao(chamado.getDescricao())
-                .prioridade(chamado.getPrioridade())
-                .status(chamado.getStatus())
-                .nomeCategoria(chamado.getNomeCategoria())
-                .nomeSolicitante(chamado.getNomeSolicitane())
+    private void persistInHistoricoChamado(String valorAnterior, String tipoAlteracao, String novoValor, ChamadoModel chamado) {
+
+        HistoricoChamadoModel historico = HistoricoChamadoModel.builder()
+                .tipoAlteracao(tipoAlteracao)
+                .valorAnterior(valorAnterior)
+                .novoValor(novoValor)
+                .chamado(chamado)
+                .autor(chamado.getAtendente())
                 .build();
+
+        chamado.getHistorico().add(historico);
+
+        historicoRepository.save(historico);
     }
 }
