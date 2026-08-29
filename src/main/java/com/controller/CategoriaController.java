@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.database.model.Categoria;
+import com.dto.ResponseCategoriaDTO;
 import com.exception.NotFoundException;
 import com.service.CategoriaService;
 import jakarta.validation.Valid;
@@ -21,18 +21,18 @@ public class CategoriaController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Categoria> findAll() {return categoriaService.findAll();}
+    public List<ResponseCategoriaDTO> findAll() {return categoriaService.findAll();}
 
     @GetMapping("/id-categoria/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Categoria viewCategoriaByID(@Valid @PathVariable Long id) throws NotFoundException {
+    public ResponseCategoriaDTO viewCategoriaByID(@Valid @PathVariable Long id) throws NotFoundException {
         return categoriaService.findById(id);
     }
 
     @PostMapping("/add/{nomeCategoria}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addCategoria(@Valid @PathVariable String nomeCategoria) {
-            categoriaService.addCategoria(nomeCategoria);
+    public ResponseCategoriaDTO addCategoria(@Valid @PathVariable String nomeCategoria) {
+        return categoriaService.addCategoria(nomeCategoria);
     }
 
     @DeleteMapping("/delete/{id}")
