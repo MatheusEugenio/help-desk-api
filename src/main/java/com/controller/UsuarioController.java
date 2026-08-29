@@ -28,13 +28,13 @@ public class UsuarioController {
         return usuarioService.findAll(letraInicial);
     }
 
-    @GetMapping("/id-usuario/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UsuarioDTO viewUsuarioByID(@Valid @PathVariable Long id) throws NotFoundException {
         return usuarioService.findById(id);
     }
 
-    @GetMapping("/email/{email}")
+    @GetMapping("/{email}/email")
     @ResponseStatus(HttpStatus.OK)
     public UsuarioDTO viewUsuarioByEmail(@Valid @PathVariable String email) throws NotFoundException {
         return usuarioService.findByEmail(email);
@@ -46,13 +46,13 @@ public class UsuarioController {
         return usuarioService.createdUsuario(usuario);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void removeUsuario(@Valid @PathVariable Long id){
         usuarioService.remove(id);
     }
 
-    @PutMapping("/update-papel/id/{id}/novo-papel/{papel}")
+    @PatchMapping("/{id}/{papel}/papel")
     @ResponseStatus(HttpStatus.OK)
     public UsuarioDTO updatePapelUsuario(@Valid @PathVariable Long id,@Valid @PathVariable PapelUsuarioEnum papel) throws NotFoundException {
         return usuarioService.updatePapelUsuario(id, papel);
