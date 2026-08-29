@@ -1,9 +1,9 @@
 package com.service;
 
-import com.database.model.Categoria;
-import com.database.model.ChamadoModel;
 import com.database.enums.PrioridadeEnum;
 import com.database.enums.StatusEnum;
+import com.database.model.Categoria;
+import com.database.model.ChamadoModel;
 import com.database.model.HistoricoChamadoModel;
 import com.database.model.UsuarioModel;
 import com.database.repository.ICategoriaRepository;
@@ -270,7 +270,7 @@ public class ChamadoService {
 
         chamadoRepository.save(chamado);
 
-        persistInHistoricoChamado(valorAnterior, "INATIVAÇÃO", chamado.getStatus().toString(), chamado);
+        persistInHistoricoChamado(valorAnterior, "INATIVAÇÃO DO CHAMADO", chamado.getStatus().toString(), chamado);
 
         return convertForResponseChamado(chamado);
     }

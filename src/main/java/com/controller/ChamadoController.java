@@ -74,10 +74,12 @@ public class ChamadoController {
         return chamadoService.updateStatus(idChamado, status);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PatchMapping("/{id}/inativar")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativarChamado(@Valid @PathVariable Long id) throws NotFoundException {
-        chamadoService.inativarChamado(id);
+    public ResponseChamadoDTO inactivateChamado(@Valid @PathVariable Long id) throws NotFoundException {
+        return chamadoService.inativarChamado(id);
+    }
+
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseChamadoDTO finishChamado(@Valid @PathVariable Long id) throws NotFoundException, CallInactiveException, CallCompletedException {
