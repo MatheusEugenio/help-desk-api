@@ -40,8 +40,8 @@ public class ChamadoController {
 
     @PatchMapping("/{id_chamado}/atendente/{id_atendente}")
     @ResponseStatus(HttpStatus.OK)
-    public void assignAtendente(@Valid @RequestParam("id_chamado") Long idChamado, @Valid @RequestParam Long id_atendente) throws CallInactiveException, NotFoundException {
-        chamadoService.assignAtendente(idChamado, id_atendente);
+    public ResponseChamadoDTO assignAtendente(@Valid @RequestParam("id_chamado") Long idChamado, @Valid @RequestParam Long id_atendente) throws CallInactiveException, NotFoundException {
+        return chamadoService.assignAtendente(idChamado, id_atendente);
     }
 
     @GetMapping("/{id_chamado}")
