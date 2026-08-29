@@ -275,7 +275,7 @@ public class ChamadoService {
     /// PRIVATE METHODS
     /////////////////////////////////////
 
-    private ResponseChamadoDTO convertForChamadoDTO(ChamadoModel chamado) {
+    private ResponseChamadoDTO convertForResponseChamado(ChamadoModel chamado) {
         return ResponseChamadoDTO.builder()
                 .titulo(chamado.getTitulo())
                 .descricao(chamado.getDescricao())
