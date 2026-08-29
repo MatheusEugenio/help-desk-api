@@ -2,6 +2,7 @@ package com.service;
 
 import com.database.model.Categoria;
 import com.database.repository.ICategoriaRepository;
+import com.dto.ResponseCategoriaDTO;
 import com.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,18 @@ public class CategoriaService {
 
     private final ICategoriaRepository categoriaRepository;
 
-    public List<Categoria> findAll() {return categoriaRepository.findAll();}
+    public List<ResponseCategoriaDTO> findAll() {return categoriaRepository.findAll()
+            .stream()
+            .map(this::converForResponseCategoria)
+            .toList();
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteCategoria(Long id) {
         categoriaRepository.deleteById(id);
     }
 
-    public Categoria findById(Long id) throws NotFoundException {
+    public ResponseCategoriaDTO findById(Long id) throws NotFoundException {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElse(null);
 
@@ -30,10 +35,10 @@ public class CategoriaService {
             throw new NotFoundException("Categoria com id ="+id+" não encontrado");
         }
 
-        return categoria;
+        return converForResponseCategoria(categoria);
     }
 
-    public void addCategoria(String nomeCategoria)  {
+    public ResponseCategoriaDTO addCategoria(String nomeCategoria)  {
 
         if (nomeCategoria.isBlank()) {
             throw new NullPointerException("Nome da categoria inválido");
@@ -44,6 +49,16 @@ public class CategoriaService {
                 .build();
 
         categoriaRepository.save(categoria);
+        return converForResponseCategoria(categoria);
     }
 
+    /////////////////////////////////////
+    /// PRIVATE METHODS
+    /////////////////////////////////////
+
+    private ResponseCategoriaDTO converForResponseCategoria(Categoria categoria) {
+        return ResponseCategoriaDTO.builder()
+                .nomeCategoria(categoria.getNomeCategoria())
+                .build();
+    }
 }
