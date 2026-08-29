@@ -56,7 +56,13 @@ public class ChamadoController {
         return chamadoService.historicoChamadoFindByID(idChamado);
     }
 
-    @PatchMapping(value = "/{id_chamado}/{prioridade}")
+    @PatchMapping("/{id}/reabrir")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseChamadoDTO reopenChamado(@Valid @PathVariable Long id) throws CallNotCompletedException, NotFoundException {
+        return chamadoService.reopenChamado(id);
+    }
+
+    @PatchMapping("/{id_chamado}/{prioridade}/prioridade")
     @ResponseStatus(HttpStatus.OK)
     public ResponseChamadoDTO updatePrioridadeChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
         return chamadoService.updatePrioridade(idChamado, prioridade);
