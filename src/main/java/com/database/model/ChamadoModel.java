@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.SoftDelete;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "chamado")
+@SoftDelete(columnName = "inativo")
 public class ChamadoModel {
 
     @Id
