@@ -18,11 +18,29 @@ O projeto simula um sistema de Help Desk utilizado por empresas para registrar e
 
 A API permite:
 
+# Chamados 
 - Criar um chamado
 - Listar todos os chamados
+- Filtrar consulta de chamados
 - Alterar a prioridade de um chamado
 - Alterar o status de um chamado
-- Excluir um chamado
+- Alterar o status de um chamado
+- Excluir um chamado (Soft delete)
+- Atribuir um atendente ao chamado
+- Buscar um único chamado
+- Registrar alteração do chamado em um Histórico 
+
+# Usuários
+
+- Consultar usuário pelo e-mail
+- Filtrar consultas de usuários pelo nome
+- Criar usuário
+- Editar papel do usuário
+- Deletar o usuário (Soft delete)
+
+# Categoria
+
+- Criar categoria
 
 ---
 
@@ -35,10 +53,7 @@ ABERTO
 EM_ATENDIMENTO
    │
    ▼
-FECHADO
-   │
-   ▼
-INATIVO
+FINALIZADO
 ```
 
 ---
@@ -49,6 +64,7 @@ INATIVO
 |--------|------|
 | id | Integer |
 | titulo | String |
+| descricao | Spring |
 | solicitante | Solicitante |
 | prioridade | PrioridadeEnum |
 | status | StatusEnum |
@@ -58,7 +74,6 @@ INATIVO
 - ABERTO
 - EM_ATENDIMENTO
 - FECHADO
-- INATIVO
 
 ### Prioridades
 
