@@ -24,7 +24,6 @@ A API permite:
 - Filtrar consulta de chamados
 - Alterar a prioridade de um chamado
 - Alterar o status de um chamado
-- Alterar o status de um chamado
 - Excluir um chamado (Soft delete)
 - Atribuir um atendente ao chamado
 - Buscar um único chamado
@@ -41,6 +40,8 @@ A API permite:
 # Categoria
 
 - Criar categoria
+- Consultar categorias
+- deletar categoria
 
 ---
 
