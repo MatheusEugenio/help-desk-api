@@ -74,9 +74,9 @@ public class ChamadoController {
         return chamadoService.updateStatus(idChamado, status);
     }
 
-    @PatchMapping("/{id}/inativar")
+    @DeleteMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseChamadoDTO inactivateChamado(@Valid @PathVariable Long id) throws NotFoundException {
+    public ResponseChamadoDTO deleteChamado(@Valid @PathVariable Long id) throws NotFoundException {
         return chamadoService.inativarChamado(id);
     }
 
