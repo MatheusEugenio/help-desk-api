@@ -30,11 +30,7 @@ public class UsuarioService {
 
     public UsuarioDTO findById(Long id) throws NotFoundException {
         UsuarioModel usuario = usuarioRepository.findById(id)
-                .orElse(null);
-
-        if  (usuario == null) {
-            throw new NotFoundException("Usuario com id ="+id+" não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Usuario com id =" + id + " não encontrado"));
 
         return convertForUsuarioDTO(usuario);
     }
@@ -42,11 +38,7 @@ public class UsuarioService {
     public UsuarioDTO findByEmail(String email) throws NotFoundException {
 
         UsuarioModel usuario = usuarioRepository.findByEmail(email)
-                .orElse(null);
-
-        if (usuario == null){
-            throw new NotFoundException("Não existe um usuário com esse email");
-        }
+                .orElseThrow(() -> new NotFoundException("Não existe um usuário com esse email"));
 
         return convertForUsuarioDTO(usuario);
     }
@@ -82,11 +74,7 @@ public class UsuarioService {
     public UsuarioDTO updatePapelUsuario(Long id, PapelUsuarioEnum novoPapelUsuario) throws NotFoundException {
 
         UsuarioModel usuario = usuarioRepository.findById(id)
-                .orElse(null);
-
-        if (usuario == null) {
-            throw new NotFoundException("Usuario não encontrado!");
-        }
+                .orElseThrow(() -> new NotFoundException("Usuario não encontrado!"));
 
         usuario.setPapel(novoPapelUsuario);
 
