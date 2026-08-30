@@ -5,7 +5,10 @@ import com.database.enums.StatusEnum;
 import com.database.model.HistoricoChamadoModel;
 import com.dto.ChamadoDTO;
 import com.dto.ResponseChamadoDTO;
-import com.exception.*;
+import com.exception.AlreadyExistsException;
+import com.exception.CallCompletedException;
+import com.exception.CallNotCompletedException;
+import com.exception.NotFoundException;
 import com.service.ChamadoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +43,7 @@ public class ChamadoController {
 
     @PatchMapping("/{id_chamado}/atendente/{id_atendente}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO assignAtendente(@Valid @RequestParam("id_chamado") Long idChamado, @Valid @RequestParam Long id_atendente) throws CallInactiveException, NotFoundException {
+    public ResponseChamadoDTO assignAtendente(@Valid @RequestParam("id_chamado") Long idChamado, @Valid @RequestParam Long id_atendente) throws NotFoundException {
         return chamadoService.assignAtendente(idChamado, id_atendente);
     }
 
@@ -64,25 +67,25 @@ public class ChamadoController {
 
     @PatchMapping("/{id_chamado}/{prioridade}/prioridade")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO updatePrioridadeChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updatePrioridadeChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException {
         return chamadoService.updatePrioridade(idChamado, prioridade);
     }
 
     @PatchMapping("/{id_chamado}/{status}/status")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable StatusEnum status) throws NotFoundException, CallCompletedException {
         return chamadoService.updateStatus(idChamado, status);
     }
 
     @DeleteMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseChamadoDTO deleteChamado(@Valid @PathVariable Long id) throws NotFoundException {
-        return chamadoService.inativarChamado(id);
+    public void deleteChamado(@Valid @PathVariable Long id) throws NotFoundException {
+        chamadoService.deleteChamado(id);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO finishChamado(@Valid @PathVariable Long id) throws NotFoundException, CallInactiveException, CallCompletedException {
+    public ResponseChamadoDTO finishChamado(@Valid @PathVariable Long id) throws NotFoundException, CallCompletedException {
         return chamadoService.finishChamado(id);
     }
 
