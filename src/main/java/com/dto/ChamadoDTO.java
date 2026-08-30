@@ -29,4 +29,8 @@ public class ChamadoDTO {
 
     @NotNull
     private Long idSolicitante;
+
+    @NotNull
+    private Long idAtendente;
+
 }
