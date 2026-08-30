@@ -1,5 +1,6 @@
 package com.service;
 
+import com.database.enums.PapelUsuarioEnum;
 import com.database.enums.PrioridadeEnum;
 import com.database.enums.StatusEnum;
 import com.database.model.Categoria;
@@ -13,16 +14,11 @@ import com.database.repository.IUsuarioRepository;
 import com.database.specifications.ChamadoSpecification;
 import com.dto.ChamadoDTO;
 import com.dto.ResponseChamadoDTO;
-import com.exception.AlreadyExistsException;
-import com.exception.CallCompletedException;
-import com.exception.CallNotCompletedException;
-import com.exception.NotFoundException;
-import jakarta.validation.Valid;
+import com.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -51,51 +47,43 @@ public class ChamadoService {
                 .toList();
     }
 
-    public List<HistoricoChamadoModel> historicoChamadoFindByID(Long id) throws NotFoundException {
+    public List<HistoricoChamadoModel> historicoChamado(Long id) throws NotFoundException {
         ChamadoModel chamado = chamadoRepository.findById(id)
-                .orElse(null);
-
-        if (chamado == null){
-            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
 
         return chamado.getHistorico();
     }
 
-    public ResponseChamadoDTO findByID(@Valid @PathVariable Long id) throws NotFoundException {
+    public ResponseChamadoDTO findByID(Long id) throws NotFoundException {
         ChamadoModel chamado = chamadoRepository.findById(id)
-                .orElse(null);
-
-        if (chamado == null){
-            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
 
         return convertForResponseChamado(chamado);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseChamadoDTO createdChamado(ChamadoDTO chamadoDTO) throws AlreadyExistsException, NotFoundException {
+    public ResponseChamadoDTO createdChamado(ChamadoDTO chamadoDTO) throws AlreadyExistsException, NotFoundException, InappropriateUserRoleException {
 
-        ChamadoModel chamado = chamadoRepository.findByTitulo(chamadoDTO.getTitulo())
-                .orElse(null);
-
-        if (chamado != null) {
-            throw new AlreadyExistsException("Já existe chamado com o mesmo título!");
-        }
+        chamadoRepository.findByTitulo(chamadoDTO.getTitulo())
+                .orElseThrow(() -> new AlreadyExistsException("Já existe chamado com o mesmo título!"));
+        ChamadoModel chamado;
 
         UsuarioModel solicitante = usuarioRepository.findById(chamadoDTO.getIdSolicitante())
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("Usuario com ID = " + chamadoDTO.getIdSolicitante() + " não encontrado"));
 
-        if (solicitante == null) {
-            throw new NotFoundException("Usuario com ID = "+chamadoDTO.getIdSolicitante()+" não encontrado");
+        if (!solicitante.getPapel().equals(PapelUsuarioEnum.COLABORADOR)) {
+            throw new InappropriateUserRoleException("O usuário não é colaborador");
+        }
+
+        UsuarioModel atendente = usuarioRepository.findById(chamadoDTO.getIdAtendente())
+                .orElseThrow(() -> new NotFoundException("Usuario com ID = " + chamadoDTO.getIdSolicitante() + " não encontrado"));
+
+        if (!atendente.getPapel().equals(PapelUsuarioEnum.ATENDENTE)) {
+            throw new InappropriateUserRoleException("O usuário não é atendente");
         }
 
         Categoria categoria = categoriaRepository.findById(chamadoDTO.getIdCategoria())
-                .orElse(null);
-
-        if (categoria == null) {
-            throw new NotFoundException("Categoria com ID = "+chamadoDTO.getIdCategoria()+" não encontrada");
-        }
+                .orElseThrow(() -> new NotFoundException("Categoria com ID = " + chamadoDTO.getIdCategoria() + " não encontrada"));
 
         chamado = ChamadoModel.builder()
                 .titulo(chamadoDTO.getTitulo())
@@ -104,6 +92,7 @@ public class ChamadoService {
                 .prioridade(PrioridadeEnum.BAIXA)
                 .solicitante(solicitante)
                 .categoria(categoria)
+                .atendente(atendente)
                 .build();
 
         chamadoRepository.save(chamado);
@@ -114,23 +103,17 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseChamadoDTO assignAtendente(Long idChamado, Long idAtendente) throws NotFoundException {
+    public ResponseChamadoDTO assignAtendente(Long idChamado, Long idAtendente) throws NotFoundException, InappropriateUserRoleException {
 
         UsuarioModel atendente = usuarioRepository.findById(idAtendente)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("Este atendente não existe"));
 
-        if (atendente == null) {
-            throw new NotFoundException("Este atendente não existe");
+        if (!atendente.getPapel().equals(PapelUsuarioEnum.ATENDENTE)) {
+            throw new InappropriateUserRoleException("O usuário não é um atendente");
         }
-
-        // LÓGICA DE VERIFICAÇÃO DE ATENDENTE ATIVO
 
         ChamadoModel chamado = chamadoRepository.findById(idChamado)
-                .orElse(null);
-
-        if (chamado == null) {
-            throw new NotFoundException("O chamado não existe ");
-        }
+                .orElseThrow(() -> new NotFoundException("O chamado não existe "));
 
         var atendenteAnterior = chamado.getAtendente();
 
@@ -146,11 +129,7 @@ public class ChamadoService {
     public ResponseChamadoDTO finishChamado(Long idChamado) throws NotFoundException, CallCompletedException {
 
         ChamadoModel chamado = chamadoRepository.findById(idChamado)
-                .orElse(null);
-
-        if (chamado == null){
-            throw new NotFoundException("Chamado com id = "+idChamado+" não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Chamado com id = " + idChamado + " não encontrado"));
 
         if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
             throw new CallCompletedException("O chamado já foi finalizado");
@@ -171,11 +150,7 @@ public class ChamadoService {
     public ResponseChamadoDTO updatePrioridade(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
-                .orElse(null);
-
-        if (chamado == null){
-            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
 
         if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
             throw new CallCompletedException("Impossível alterar prioridade, chamado já foi finalizado!");
@@ -195,11 +170,7 @@ public class ChamadoService {
     public ResponseChamadoDTO reopenChamado(Long idChamado) throws NotFoundException, CallNotCompletedException {
 
         ChamadoModel chamado = chamadoRepository.findById(idChamado)
-                .orElse(null);
-
-        if (chamado == null){
-            throw new NotFoundException("Chamado com id = "+idChamado+" não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Chamado com id = " + idChamado + " não encontrado"));
 
         if (!chamado.getStatus().equals(StatusEnum.FINALIZADO)){
             throw new CallNotCompletedException("O chamado precisa estar obrigatoriamente finalizado para a reabertura");
@@ -220,11 +191,7 @@ public class ChamadoService {
     public ResponseChamadoDTO updateStatus(Long id, StatusEnum status) throws NotFoundException, CallCompletedException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
-                .orElse(null);
-
-        if (chamado == null){
-            throw new NotFoundException("Chamado com id = "+id+" não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
 
         if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
             throw new CallCompletedException("Impossível alterar status, chamado já foi finalizado!");
@@ -276,7 +243,7 @@ public class ChamadoService {
                 .valorAnterior(valorAnterior)
                 .novoValor(novoValor)
                 .chamado(chamado)
-                .autor(chamado.getAtendente())
+                .autor(chamado.getSolicitante())
                 .build();
 
         chamado.getHistorico().add(historico);
