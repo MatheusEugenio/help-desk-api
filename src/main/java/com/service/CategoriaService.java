@@ -29,11 +29,7 @@ public class CategoriaService {
 
     public ResponseCategoriaDTO findById(Long id) throws NotFoundException {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElse(null);
-
-        if  (categoria == null) {
-            throw new NotFoundException("Categoria com id ="+id+" não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Categoria com id =" + id + " não encontrado"));
 
         return converForResponseCategoria(categoria);
     }
