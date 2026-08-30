@@ -46,10 +46,10 @@ public class UsuarioController {
         return usuarioService.createdUsuario(usuario);
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{email}/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void removeUsuario(@Valid @PathVariable Long id){
-        usuarioService.remove(id);
+    public void deleteUsuario(@Valid @PathVariable String email) throws NotFoundException {
+        usuarioService.delete(email);
     }
 
     @PatchMapping("/{id}/{papel}/papel")
