@@ -71,7 +71,13 @@ public class UsuarioService {
         return convertForUsuarioDTO(usuario);
     }
 
-    public void remove(Long id) {usuarioRepository.deleteById(id);}
+    public void delete(String email) throws NotFoundException {
+
+        UsuarioModel usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Não existe um usuário com esse email"));
+
+        usuarioRepository.delete(usuario);
+    }
 
     public UsuarioDTO updatePapelUsuario(Long id, PapelUsuarioEnum novoPapelUsuario) throws NotFoundException {
 
