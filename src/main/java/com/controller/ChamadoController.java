@@ -5,10 +5,7 @@ import com.database.enums.StatusEnum;
 import com.database.model.HistoricoChamadoModel;
 import com.dto.ChamadoDTO;
 import com.dto.ResponseChamadoDTO;
-import com.exception.AlreadyExistsException;
-import com.exception.CallCompletedException;
-import com.exception.CallNotCompletedException;
-import com.exception.NotFoundException;
+import com.exception.*;
 import com.service.ChamadoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +34,13 @@ public class ChamadoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseChamadoDTO createChamado(@Valid @RequestBody ChamadoDTO chamadoDTO) throws AlreadyExistsException, NotFoundException {
+    public ResponseChamadoDTO createChamado(@Valid @RequestBody ChamadoDTO chamadoDTO) throws AlreadyExistsException, NotFoundException, InappropriateUserRoleException {
         return chamadoService.createdChamado(chamadoDTO);
     }
 
     @PatchMapping("/{id_chamado}/atendente/{id_atendente}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO assignAtendente(@Valid @RequestParam("id_chamado") Long idChamado, @Valid @RequestParam Long id_atendente) throws NotFoundException {
+    public ResponseChamadoDTO assignAtendente(@Valid @RequestParam("id_chamado") Long idChamado, @Valid @RequestParam Long id_atendente) throws NotFoundException, InappropriateUserRoleException {
         return chamadoService.assignAtendente(idChamado, id_atendente);
     }
 
@@ -56,7 +53,7 @@ public class ChamadoController {
     @GetMapping("/{id_chamado}/historico")
     @ResponseStatus(HttpStatus.OK)
     public List<HistoricoChamadoModel> viewHistoricoByIdChamado(@Valid @PathVariable("id_chamado") Long idChamado) throws NotFoundException {
-        return chamadoService.historicoChamadoFindByID(idChamado);
+        return chamadoService.historicoChamado(idChamado);
     }
 
     @PatchMapping("/{id}/reabrir")
