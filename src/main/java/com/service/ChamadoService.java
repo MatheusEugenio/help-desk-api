@@ -13,7 +13,10 @@ import com.database.repository.IUsuarioRepository;
 import com.database.specifications.ChamadoSpecification;
 import com.dto.ChamadoDTO;
 import com.dto.ResponseChamadoDTO;
-import com.exception.*;
+import com.exception.AlreadyExistsException;
+import com.exception.CallCompletedException;
+import com.exception.CallNotCompletedException;
+import com.exception.NotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -111,7 +114,7 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseChamadoDTO assignAtendente(Long idChamado, Long idAtendente) throws NotFoundException, CallInactiveException {
+    public ResponseChamadoDTO assignAtendente(Long idChamado, Long idAtendente) throws NotFoundException {
 
         UsuarioModel atendente = usuarioRepository.findById(idAtendente)
                 .orElse(null);
@@ -129,10 +132,6 @@ public class ChamadoService {
             throw new NotFoundException("O chamado não existe ");
         }
 
-        if (chamado.getStatus().equals(StatusEnum.INATIVO)) {
-            throw new CallInactiveException("Chamado inativo");
-        }
-
         var atendenteAnterior = chamado.getAtendente();
 
         chamado.setAtendente(atendente);
@@ -144,17 +143,13 @@ public class ChamadoService {
         return convertForResponseChamado(chamado);
     }
 
-    public ResponseChamadoDTO finishChamado(Long idChamado) throws NotFoundException, CallInactiveException, CallCompletedException {
+    public ResponseChamadoDTO finishChamado(Long idChamado) throws NotFoundException, CallCompletedException {
 
         ChamadoModel chamado = chamadoRepository.findById(idChamado)
                 .orElse(null);
 
         if (chamado == null){
             throw new NotFoundException("Chamado com id = "+idChamado+" não encontrado");
-        }
-
-        if (chamado.getStatus().equals(StatusEnum.INATIVO)) {
-            throw new CallInactiveException("O chamado não pode estar inativo");
         }
 
         if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
@@ -173,7 +168,7 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseChamadoDTO updatePrioridade(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updatePrioridade(Long id, PrioridadeEnum prioridade) throws NotFoundException, CallCompletedException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElse(null);
@@ -184,10 +179,6 @@ public class ChamadoService {
 
         if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
             throw new CallCompletedException("Impossível alterar prioridade, chamado já foi finalizado!");
-        }
-
-        if (chamado.getStatus().equals(StatusEnum.INATIVO)){
-            throw new CallInactiveException("Impossível alterar prioridade, chamado já está inativo!");
         }
 
         var valorAnterior = chamado.getPrioridade().toString();
@@ -226,7 +217,7 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseChamadoDTO updateStatus(Long id, StatusEnum status) throws NotFoundException, CallCompletedException, CallInactiveException {
+    public ResponseChamadoDTO updateStatus(Long id, StatusEnum status) throws NotFoundException, CallCompletedException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElse(null);
@@ -237,10 +228,6 @@ public class ChamadoService {
 
         if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
             throw new CallCompletedException("Impossível alterar status, chamado já foi finalizado!");
-        }
-
-        if (chamado.getStatus().equals(StatusEnum.INATIVO)){
-            throw new CallInactiveException("Impossível alterar status, chamado já está inativo!");
         }
 
         var valorAnterior = chamado.getStatus().toString();
@@ -255,24 +242,16 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseChamadoDTO inativarChamado(Long id) throws NotFoundException {
+    public void deleteChamado(Long id) throws NotFoundException {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
-                .orElse(null);
-
-        if (chamado == null) {
-            throw new NotFoundException("Chamado com id = " + id + " não encontrado");
-        }
+                .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
 
         var valorAnterior = chamado.getStatus().toString();
 
-        chamado.setStatus(StatusEnum.INATIVO);
+        persistInHistoricoChamado(valorAnterior, "INATIVAÇÃO DO CHAMADO", "CHAMADO EXCLUIDO", chamado);
 
-        chamadoRepository.save(chamado);
-
-        persistInHistoricoChamado(valorAnterior, "INATIVAÇÃO DO CHAMADO", chamado.getStatus().toString(), chamado);
-
-        return convertForResponseChamado(chamado);
+        chamadoRepository.delete(chamado);
     }
 
     /////////////////////////////////////

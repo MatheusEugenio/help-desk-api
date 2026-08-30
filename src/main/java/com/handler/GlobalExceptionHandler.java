@@ -51,16 +51,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorReponse);
     }
 
-    @ExceptionHandler(CallInactiveException.class)
-    public ResponseEntity<ErrorReponse> CallInactiveExceptionHandler(CallInactiveException ex) {
-        ErrorReponse errorReponse = ErrorReponse.builder()
-                .mensagem(ex.getMessage())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(errorReponse);
-    }
-
     @ExceptionHandler(OptimisticLockingFailureException.class)
     public ResponseEntity<ErrorReponse> OptimisticLockingFailureExceptionHandler(OptimisticLockingFailureException ex) {
         ErrorReponse errorReponse = ErrorReponse.builder()
