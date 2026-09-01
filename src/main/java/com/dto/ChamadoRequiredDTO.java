@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChamadoDTO {
+public class ChamadoRequiredDTO {
 
     @NotBlank
     private String titulo;

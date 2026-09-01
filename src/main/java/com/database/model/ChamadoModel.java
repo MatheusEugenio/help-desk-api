@@ -60,6 +60,9 @@ public class ChamadoModel {
     @JoinColumn(name = "atendente_id")
     private UsuarioModel atendente;
 
+    @OneToMany(mappedBy = "chamado")
+    private List<ComentarioModel> comentarios;
+
     public String getNomeSolicitane() {
         return solicitante.getNome();
     }

@@ -1,5 +1,6 @@
 package com.database.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SoftDelete;
@@ -22,6 +23,7 @@ public class ComentarioModel {
 
     @ManyToOne
     @JoinColumn(name = "chamado_id")
+    @JsonIgnore
     private ChamadoModel chamado;
 
     @ManyToOne
