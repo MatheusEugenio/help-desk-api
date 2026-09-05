@@ -3,7 +3,7 @@ package com.controller;
 import com.database.enums.PrioridadeEnum;
 import com.database.enums.StatusEnum;
 import com.database.model.HistoricoChamadoModel;
-import com.dto.ChamadoDTO;
+import com.dto.ChamadoRequiredDTO;
 import com.dto.ResponseChamadoDTO;
 import com.exception.*;
 import com.service.ChamadoService;
@@ -34,8 +34,8 @@ public class ChamadoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseChamadoDTO createChamado(@Valid @RequestBody ChamadoDTO chamadoDTO) throws AlreadyExistsException, NotFoundException, InappropriateUserRoleException {
-        return chamadoService.createdChamado(chamadoDTO);
+    public ResponseChamadoDTO createChamado(@Valid @RequestBody ChamadoRequiredDTO chamadoRequiredDTO) throws AlreadyExistsException, NotFoundException, InappropriateUserRoleException {
+        return chamadoService.createdChamado(chamadoRequiredDTO);
     }
 
     @PatchMapping("/{id_chamado}/atendente/{id_atendente}")

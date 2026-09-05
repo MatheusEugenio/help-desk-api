@@ -12,7 +12,7 @@ import com.database.repository.IChamadoRepository;
 import com.database.repository.IHistoricoChamadoRepository;
 import com.database.repository.IUsuarioRepository;
 import com.database.specifications.ChamadoSpecification;
-import com.dto.ChamadoDTO;
+import com.dto.ChamadoRequiredDTO;
 import com.dto.ResponseChamadoDTO;
 import com.exception.*;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class ChamadoService {
                 .and(ChamadoSpecification.bySolicitante(idSolicitante));
 
         return chamadoRepository.findAll(filtro).stream()
-                .map(this::convertForResponseChamado)
+                .map(this::mapToResponseChamado)
                 .toList();
     }
 
@@ -58,36 +58,36 @@ public class ChamadoService {
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
 
-        return convertForResponseChamado(chamado);
+        return mapToResponseChamado(chamado);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseChamadoDTO createdChamado(ChamadoDTO chamadoDTO) throws AlreadyExistsException, NotFoundException, InappropriateUserRoleException {
+    public ResponseChamadoDTO createdChamado(ChamadoRequiredDTO chamadoRequiredDTO) throws AlreadyExistsException, NotFoundException, InappropriateUserRoleException {
 
-        chamadoRepository.findByTitulo(chamadoDTO.getTitulo())
+        chamadoRepository.findByTitulo(chamadoRequiredDTO.getTitulo())
                 .orElseThrow(() -> new AlreadyExistsException("Já existe chamado com o mesmo título!"));
         ChamadoModel chamado;
 
-        UsuarioModel solicitante = usuarioRepository.findById(chamadoDTO.getIdSolicitante())
-                .orElseThrow(() -> new NotFoundException("Usuario com ID = " + chamadoDTO.getIdSolicitante() + " não encontrado"));
+        UsuarioModel solicitante = usuarioRepository.findById(chamadoRequiredDTO.getIdSolicitante())
+                .orElseThrow(() -> new NotFoundException("Usuario com ID = " + chamadoRequiredDTO.getIdSolicitante() + " não encontrado"));
 
         if (!solicitante.getPapel().equals(PapelUsuarioEnum.COLABORADOR)) {
             throw new InappropriateUserRoleException("O usuário não é colaborador");
         }
 
-        UsuarioModel atendente = usuarioRepository.findById(chamadoDTO.getIdAtendente())
-                .orElseThrow(() -> new NotFoundException("Usuario com ID = " + chamadoDTO.getIdSolicitante() + " não encontrado"));
+        UsuarioModel atendente = usuarioRepository.findById(chamadoRequiredDTO.getIdAtendente())
+                .orElseThrow(() -> new NotFoundException("Usuario com ID = " + chamadoRequiredDTO.getIdSolicitante() + " não encontrado"));
 
         if (!atendente.getPapel().equals(PapelUsuarioEnum.ATENDENTE)) {
             throw new InappropriateUserRoleException("O usuário não é atendente");
         }
 
-        Categoria categoria = categoriaRepository.findById(chamadoDTO.getIdCategoria())
-                .orElseThrow(() -> new NotFoundException("Categoria com ID = " + chamadoDTO.getIdCategoria() + " não encontrada"));
+        Categoria categoria = categoriaRepository.findById(chamadoRequiredDTO.getIdCategoria())
+                .orElseThrow(() -> new NotFoundException("Categoria com ID = " + chamadoRequiredDTO.getIdCategoria() + " não encontrada"));
 
         chamado = ChamadoModel.builder()
-                .titulo(chamadoDTO.getTitulo())
-                .descricao(chamadoDTO.getDescricao())
+                .titulo(chamadoRequiredDTO.getTitulo())
+                .descricao(chamadoRequiredDTO.getDescricao())
                 .status(StatusEnum.ABERTO)
                 .prioridade(PrioridadeEnum.BAIXA)
                 .solicitante(solicitante)
@@ -99,7 +99,7 @@ public class ChamadoService {
 
         persistInHistoricoChamado(null, "CRIAÇÃO", chamado.getStatus().toString(), chamado);
 
-        return convertForResponseChamado(chamado);
+        return mapToResponseChamado(chamado);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -123,7 +123,7 @@ public class ChamadoService {
 
         persistInHistoricoChamado(atendenteAnterior.getNome(), "Atribuição de Atendente", chamado.getAtendente().getNome(), chamado);
 
-        return convertForResponseChamado(chamado);
+        return mapToResponseChamado(chamado);
     }
 
     public ResponseChamadoDTO finishChamado(Long idChamado) throws NotFoundException, CallCompletedException {
@@ -143,7 +143,7 @@ public class ChamadoService {
 
         persistInHistoricoChamado(valorAnterior.toString(), "CHAMADO FINALIZADO", chamado.getStatus().toString(), chamado);
 
-        return convertForResponseChamado(chamado);
+        return mapToResponseChamado(chamado);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -164,7 +164,7 @@ public class ChamadoService {
 
         persistInHistoricoChamado(valorAnterior, "ATUALIZAÇÃO NA PRIORIADADE", chamado.getPrioridade().toString(), chamado);
 
-        return convertForResponseChamado(chamado);
+        return mapToResponseChamado(chamado);
     }
 
     public ResponseChamadoDTO reopenChamado(Long idChamado) throws NotFoundException, CallNotCompletedException {
@@ -184,7 +184,7 @@ public class ChamadoService {
 
         persistInHistoricoChamado(statusAnterior.toString(), "REABERTURA DO CHAMADO", chamado.getStatus().toString(), chamado);
 
-        return convertForResponseChamado(chamado);
+        return mapToResponseChamado(chamado);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -205,7 +205,7 @@ public class ChamadoService {
 
         persistInHistoricoChamado(valorAnterior, "ATUALIZAÇÃO NO STATUS", chamado.getStatus().toString(), chamado);
 
-        return convertForResponseChamado(chamado);
+        return mapToResponseChamado(chamado);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -225,7 +225,7 @@ public class ChamadoService {
     /// PRIVATE METHODS
     /////////////////////////////////////
 
-    private ResponseChamadoDTO convertForResponseChamado(ChamadoModel chamado) {
+    private ResponseChamadoDTO mapToResponseChamado(ChamadoModel chamado) {
         return ResponseChamadoDTO.builder()
                 .titulo(chamado.getTitulo())
                 .descricao(chamado.getDescricao())
