@@ -2,7 +2,7 @@ package com.service;
 
 import com.database.enums.PapelUsuarioEnum;
 import com.database.model.UsuarioModel;
-import com.database.repository.IUsuarioRepository;
+import com.database.repository.UsuarioRepository;
 import com.database.specifications.UsuarioSpecification;
 import com.dto.UsuarioDTO;
 import com.exception.AlreadyExistsException;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsuarioService {
 
-    private final IUsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public List<UsuarioModel> findAll(String letraInicial) {
 
