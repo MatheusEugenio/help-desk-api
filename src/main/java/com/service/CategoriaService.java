@@ -1,7 +1,7 @@
 package com.service;
 
 import com.database.model.Categoria;
-import com.database.repository.ICategoriaRepository;
+import com.database.repository.CategoriaRepository;
 import com.dto.ResponseCategoriaDTO;
 import com.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoriaService {
 
-    private final ICategoriaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
 
     public List<ResponseCategoriaDTO> findAll() {return categoriaRepository.findAll()
             .stream()

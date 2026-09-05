@@ -7,10 +7,10 @@ import com.database.model.Categoria;
 import com.database.model.ChamadoModel;
 import com.database.model.HistoricoChamadoModel;
 import com.database.model.UsuarioModel;
-import com.database.repository.ICategoriaRepository;
-import com.database.repository.IChamadoRepository;
-import com.database.repository.IHistoricoChamadoRepository;
-import com.database.repository.IUsuarioRepository;
+import com.database.repository.CategoriaRepository;
+import com.database.repository.ChamadoRepository;
+import com.database.repository.HistoricoChamadoRepository;
+import com.database.repository.UsuarioRepository;
 import com.database.specifications.ChamadoSpecification;
 import com.dto.ChamadoRequiredDTO;
 import com.dto.ResponseChamadoDTO;
@@ -26,10 +26,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChamadoService {
 
-    private final IChamadoRepository chamadoRepository;
-    private final IHistoricoChamadoRepository historicoRepository;
-    private final IUsuarioRepository usuarioRepository;
-    private final ICategoriaRepository categoriaRepository;
+    private final ChamadoRepository chamadoRepository;
+    private final HistoricoChamadoRepository historicoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final CategoriaRepository categoriaRepository;
 
     public List<ResponseChamadoDTO> findAll(StatusEnum status,
                                             PrioridadeEnum prioridade,
