@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
 
-public interface IUsuarioRepository extends JpaRepository<UsuarioModel, Long>, JpaSpecificationExecutor<UsuarioModel> {
+public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long>, JpaSpecificationExecutor<UsuarioModel> {
 
     Optional<UsuarioModel> findByEmail(String email);
 }

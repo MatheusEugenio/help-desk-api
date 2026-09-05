@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
 
-public interface IChamadoRepository extends JpaRepository<ChamadoModel, Long>, JpaSpecificationExecutor<ChamadoModel> {
+public interface ChamadoRepository extends JpaRepository<ChamadoModel, Long>, JpaSpecificationExecutor<ChamadoModel> {
 
     Optional<ChamadoModel> findByTitulo(String titulo);
 
