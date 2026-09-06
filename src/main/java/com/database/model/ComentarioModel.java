@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SoftDelete;
 
-
 @Getter
 @Setter
 @Builder
@@ -30,6 +29,7 @@ public class ComentarioModel {
     @JoinColumn(name = "usuario_id")
     private UsuarioModel usuario;
 
+    @Column
     private String mensagem;
 
 }
