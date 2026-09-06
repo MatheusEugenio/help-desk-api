@@ -1,6 +1,9 @@
 spring:
   application:
     name: help-desk-api
+  output:
+    ansi:
+      enabled: always
   datasource:
     url: jdbc:postgresql://localhost:5432/helpdesk
     username: ${DATABASE_USERNAME}
