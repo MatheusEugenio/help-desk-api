@@ -16,6 +16,6 @@ public class ComentarioRequiredDTO {
     private String mensagem;
 
     @NotNull
-    private Long idUsuario;
+    private Long idUsuarioRemetente;
 
 }

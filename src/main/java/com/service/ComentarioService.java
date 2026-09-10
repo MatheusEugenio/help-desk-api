@@ -31,8 +31,8 @@ public class ComentarioService {
 
     public ResponseComentarioDTO create(Long idChamado, ComentarioRequiredDTO comentarioRequiredDTO) throws NotFoundException {
 
-        UsuarioModel user = usuarioRepository.findById(comentarioRequiredDTO.getIdUsuario())
-                .orElseThrow(() -> new NotFoundException("Destinatário não encontrado"));
+        UsuarioModel user = usuarioRepository.findById(comentarioRequiredDTO.getIdUsuarioRemetente())
+                .orElseThrow(() -> new NotFoundException("Remetente não encontrado"));
 
         ChamadoModel chamado = chamadoRepository.findById(idChamado)
                 .orElseThrow(() -> new NotFoundException("Chamado não encontrado"));
