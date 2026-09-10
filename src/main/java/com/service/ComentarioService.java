@@ -79,7 +79,7 @@ public class ComentarioService {
 
     private ResponseComentarioDTO mapToResponseComentarioDTO(ComentarioModel comentario) {
         return ResponseComentarioDTO.builder()
-                .emailUsuario(comentario.getUsuario().getEmail())
+                .emailUsuarioRemetente(comentario.getUsuario().getEmail())
                 .tituloChamado(comentario.getChamado().getTitulo())
                 .mensagem(comentario.getMensagem())
                 .build();
