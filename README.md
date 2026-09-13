@@ -2,6 +2,15 @@
 
 API REST em Java com Spring Boot para gestão de chamados de suporte técnico.
 
+## 📌 Versão atual
+
+Esta é a versão 1.0 do projeto (`v1`), concebida para entregar a base funcional do sistema de help desk com foco em
+operação, organização e rastreabilidade do suporte técnico.
+
+A estrutura atual já contempla o núcleo do processo de atendimento — usuários, chamados, categorias, comentários e
+regras de negócio — e foi pensada para evoluir de forma escalável. Em versões posteriores, a camada de autenticação e
+autorização será ampliada com mecanismos avançados de segurança, incluindo JWT e Spring Security.
+
 ## 🎯 Objetivo
 
 Este projeto foi criado para resolver a dificuldade de organizar e acompanhar solicitações de suporte em empresas,
