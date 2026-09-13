@@ -64,9 +64,9 @@ public class ChamadoService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseChamadoDTO createdChamado(ChamadoRequiredDTO chamadoRequiredDTO) throws AlreadyExistsException, NotFoundException, InappropriateUserRoleException {
 
-        chamadoRepository.findByTitulo(chamadoRequiredDTO.getTitulo())
-                .orElseThrow(() -> new AlreadyExistsException("Já existe chamado com o mesmo título!"));
-        ChamadoModel chamado;
+        if (chamadoRepository.findByTitulo(chamadoRequiredDTO.getTitulo()).isPresent()) {
+            throw new AlreadyExistsException("Já existe chamado com o mesmo título!");
+        }
 
         UsuarioModel solicitante = usuarioRepository.findById(chamadoRequiredDTO.getIdSolicitante())
                 .orElseThrow(() -> new NotFoundException("Usuario com ID = " + chamadoRequiredDTO.getIdSolicitante() + " não encontrado"));
@@ -85,7 +85,7 @@ public class ChamadoService {
         Categoria categoria = categoriaRepository.findById(chamadoRequiredDTO.getIdCategoria())
                 .orElseThrow(() -> new NotFoundException("Categoria com ID = " + chamadoRequiredDTO.getIdCategoria() + " não encontrada"));
 
-        chamado = ChamadoModel.builder()
+        ChamadoModel chamado = ChamadoModel.builder()
                 .titulo(chamadoRequiredDTO.getTitulo())
                 .descricao(chamadoRequiredDTO.getDescricao())
                 .status(StatusEnum.ABERTO)
