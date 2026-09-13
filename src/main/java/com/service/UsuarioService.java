@@ -22,7 +22,8 @@ public class UsuarioService {
     public List<UsuarioModel> findAll(String letraInicial) {
 
         Specification<UsuarioModel> filtro = Specification
-                .where(UsuarioSpecification.byInitialLetter(letraInicial));
+                .where(UsuarioSpecification.byInitialLetter(letraInicial))
+                .and(UsuarioSpecification.active());
 
         return usuarioRepository.findAll(filtro).stream()
                 .toList();
@@ -68,7 +69,9 @@ public class UsuarioService {
         UsuarioModel usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Não existe um usuário com esse email"));
 
-        usuarioRepository.delete(usuario);
+
+        usuario.setInativo(true);
+        usuarioRepository.save(usuario);
     }
 
     public UsuarioDTO updatePapelUsuario(Long id, PapelUsuarioEnum novoPapelUsuario) throws NotFoundException {
