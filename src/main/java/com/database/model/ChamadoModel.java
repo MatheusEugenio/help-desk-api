@@ -67,6 +67,10 @@ public class ChamadoModel {
         return solicitante.getNome();
     }
 
+    public String getNomeAtendente() {
+        return atendente.getNome();
+    }
+
     public String getNomeCategoria() {
         return categoria.getNomeCategoria();
     }
