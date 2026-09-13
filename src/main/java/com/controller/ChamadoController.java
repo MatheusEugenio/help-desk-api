@@ -2,6 +2,7 @@ package com.controller;
 
 import com.database.enums.PrioridadeEnum;
 import com.database.enums.StatusEnum;
+import com.database.model.ChamadoModel;
 import com.database.model.HistoricoChamadoModel;
 import com.dto.ChamadoRequiredDTO;
 import com.dto.ResponseChamadoDTO;
@@ -25,10 +26,10 @@ public class ChamadoController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ResponseChamadoDTO> findAll(@RequestParam(required = false) StatusEnum status,
-                                            @RequestParam(required = false) PrioridadeEnum prioridade,
-                                            @RequestParam(required = false) Long idCategoria ,
-                                            @RequestParam(required = false) Long idSolicitante) {
+    public List<ChamadoModel> findAll(@RequestParam(required = false) StatusEnum status,
+                                      @RequestParam(required = false) PrioridadeEnum prioridade,
+                                      @RequestParam(required = false) Long idCategoria,
+                                      @RequestParam(required = false) Long idSolicitante) {
         return chamadoService.findAll(status, prioridade, idCategoria, idSolicitante);
     }
 
@@ -68,7 +69,7 @@ public class ChamadoController {
         return chamadoService.updatePrioridade(idChamado, prioridade);
     }
 
-    @PatchMapping("/{id_chamado}/{status}/status")
+    @PatchMapping("/status")
     @ResponseStatus(HttpStatus.OK)
     public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable StatusEnum status) throws NotFoundException, CallCompletedException {
         return chamadoService.updateStatus(idChamado, status);
