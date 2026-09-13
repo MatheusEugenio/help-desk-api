@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SoftDelete;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -54,14 +55,16 @@ public class ChamadoModel {
     private UsuarioModel solicitante;
 
     @OneToMany(mappedBy = "chamado")
-    List<HistoricoChamadoModel> historico;
+    @Builder.Default
+    List<HistoricoChamadoModel> historico = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "atendente_id")
     private UsuarioModel atendente;
 
-    @OneToMany(mappedBy = "chamado")
-    private List<ComentarioModel> comentarios;
+    @OneToMany(mappedBy = "chamado", cascade = CascadeType.PERSIST)
+    @Builder.Default
+    private List<ComentarioModel> comentarios = new ArrayList<>();
 
     public String getNomeSolicitane() {
         return solicitante.getNome();
