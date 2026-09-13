@@ -223,10 +223,6 @@ public class ChamadoService {
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
 
-        var valorAnterior = chamado.getStatus().toString();
-
-        persistInHistoricoChamado(valorAnterior, "INATIVAÇÃO DO CHAMADO", "CHAMADO EXCLUIDO", chamado);
-
         chamadoRepository.delete(chamado);
     }
 
