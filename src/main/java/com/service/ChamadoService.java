@@ -31,7 +31,7 @@ public class ChamadoService {
     private final UsuarioRepository usuarioRepository;
     private final CategoriaRepository categoriaRepository;
 
-    public List<ChamadoModel> findAll(StatusEnum status,
+    public List<ResponseChamadoDTO> findAll(StatusEnum status,
                                             PrioridadeEnum prioridade,
                                             Long idCategoria,
                                             Long idSolicitante){
@@ -42,7 +42,9 @@ public class ChamadoService {
                 .and(ChamadoSpecification.byCategoria(idCategoria))
                 .and(ChamadoSpecification.bySolicitante(idSolicitante));
 
-        return chamadoRepository.findAll(filtro).stream().toList();
+        return chamadoRepository.findAll(filtro).stream()
+                .map(this::mapToResponseChamado)
+                .toList();
     }
 
     public List<HistoricoChamadoModel> historicoChamado(Long id) throws NotFoundException {
@@ -234,12 +236,14 @@ public class ChamadoService {
 
     private ResponseChamadoDTO mapToResponseChamado(ChamadoModel chamado) {
         return ResponseChamadoDTO.builder()
+                .refId(chamado.getId())
                 .titulo(chamado.getTitulo())
                 .descricao(chamado.getDescricao())
                 .prioridade(chamado.getPrioridade())
                 .status(chamado.getStatus())
                 .nomeCategoria(chamado.getNomeCategoria())
                 .nomeSolicitante(chamado.getNomeSolicitane())
+                .nomeAtendente(chamado.getAtendente().getNome())
                 .build();
     }
 
