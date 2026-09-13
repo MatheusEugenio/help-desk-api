@@ -4,7 +4,6 @@ import com.database.enums.PrioridadeEnum;
 import com.database.enums.StatusEnum;
 import com.database.model.ChamadoModel;
 import org.springframework.data.jpa.domain.Specification;
-
 public class ChamadoSpecification {
 
     public static Specification<ChamadoModel> byStatus(StatusEnum statusParam){
@@ -36,6 +35,26 @@ public class ChamadoSpecification {
             if (idSolicitante == null){return null;}
 
             return cb.equal(root.get("solicitante").get("id"), idSolicitante);
+        };
+    }
+
+    public static Specification<ChamadoModel> byTitulo(String titulo) {
+        return (root, query, cb) -> {
+            if (titulo == null) {
+                return null;
+            }
+
+            return cb.equal(cb.lower(root.get("titulo")), titulo.toLowerCase());
+        };
+    }
+
+    public static Specification<ChamadoModel> byId(Long idChamado) {
+        return (root, query, cb) -> {
+            if (idChamado == null) {
+                return null;
+            }
+
+            return cb.equal(root.get("id"), idChamado);
         };
     }
 
