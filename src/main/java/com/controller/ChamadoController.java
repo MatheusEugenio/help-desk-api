@@ -2,7 +2,6 @@ package com.controller;
 
 import com.database.enums.PrioridadeEnum;
 import com.database.enums.StatusEnum;
-import com.database.model.ChamadoModel;
 import com.database.model.HistoricoChamadoModel;
 import com.dto.ChamadoRequiredDTO;
 import com.dto.ResponseChamadoDTO;
@@ -26,7 +25,7 @@ public class ChamadoController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ChamadoModel> findAll(@RequestParam(required = false) StatusEnum status,
+    public List<ResponseChamadoDTO> findAll(@RequestParam(required = false) StatusEnum status,
                                       @RequestParam(required = false) PrioridadeEnum prioridade,
                                       @RequestParam(required = false) Long idCategoria,
                                       @RequestParam(required = false) Long idSolicitante) {
