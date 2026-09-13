@@ -26,13 +26,6 @@ das alterações, tornando o processo de suporte mais organizado e eficiente.
 
 - Java 21
 - Spring Boot 4.0.7
-- Spring Web MVC
-- Spring Data JPA
-- PostgreSQL
-- Bean Validation
-- OpenAPI / Swagger (springdoc)
-- Lombok
-- Maven
 
 ---
 
