@@ -71,8 +71,10 @@ public class ChamadoController {
 
     @PatchMapping("/status")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseChamadoDTO updateStatusChamado(@Valid @PathVariable("id_chamado") Long idChamado, @Valid @PathVariable StatusEnum status) throws NotFoundException, CallCompletedException {
-        return chamadoService.updateStatus(idChamado, status);
+    public ResponseChamadoDTO updateStatusChamado(@Valid @RequestParam(required = false) Long idChamado,
+                                                  @Valid @RequestParam(required = false) String nomeChamado,
+                                                  @Valid @RequestParam StatusEnum novoStatus) throws NotFoundException, CallCompletedException {
+        return chamadoService.updateStatus(idChamado, nomeChamado, novoStatus);
     }
 
     @DeleteMapping("/{id}/delete")
