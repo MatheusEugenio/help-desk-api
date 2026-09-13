@@ -23,19 +23,19 @@ public class CategoriaController {
     @ResponseStatus(HttpStatus.OK)
     public List<ResponseCategoriaDTO> findAll() {return categoriaService.findAll();}
 
-    @GetMapping("/id-categoria/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseCategoriaDTO viewCategoriaByID(@Valid @PathVariable Long id) throws NotFoundException {
         return categoriaService.findById(id);
     }
 
-    @PostMapping("/add/{nomeCategoria}")
+    @PostMapping("/{nomeCategoria}/add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseCategoriaDTO addCategoria(@Valid @PathVariable String nomeCategoria) {
         return categoriaService.addCategoria(nomeCategoria);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCategoria(@Valid @PathVariable Long id){
         categoriaService.deleteCategoria(id);
