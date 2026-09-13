@@ -2,9 +2,11 @@ package com.service;
 
 import com.database.model.Categoria;
 import com.database.repository.CategoriaRepository;
+import com.database.repository.ChamadoRepository;
 import com.dto.ResponseCategoriaDTO;
 import com.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ import java.util.List;
 public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
+    private final ChamadoRepository chamadoRepository;
 
     public List<ResponseCategoriaDTO> findAll() {return categoriaRepository.findAll()
             .stream()
@@ -24,6 +27,11 @@ public class CategoriaService {
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteCategoria(Long id) {
+
+        if (chamadoRepository.existsByCategoriaId(id)) {
+            throw new DataIntegrityViolationException("A categoria possui chamados vinculados");
+        }
+
         categoriaRepository.deleteById(id);
     }
 
