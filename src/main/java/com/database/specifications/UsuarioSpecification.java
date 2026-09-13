@@ -12,4 +12,8 @@ public class UsuarioSpecification {
             return cb.like(root.get("nome"),  letraInicial+"%");
         });
     }
+
+    public static Specification<UsuarioModel> active() {
+        return ((root, query, cb) -> cb.isFalse(root.get("inativo")));
+    }
 }
