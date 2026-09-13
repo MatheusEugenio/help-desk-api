@@ -186,10 +186,19 @@ public class ChamadoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseChamadoDTO updateStatus(Long id, StatusEnum status) throws NotFoundException, CallCompletedException {
+    public ResponseChamadoDTO updateStatus(Long id, String nomeChamado, StatusEnum status) throws NotFoundException, CallCompletedException {
 
-        ChamadoModel chamado = chamadoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
+        Specification<ChamadoModel> filtro = Specification
+                .where(ChamadoSpecification.byTitulo(nomeChamado))
+                .and(ChamadoSpecification.byId(id));
+
+        List<ChamadoModel> chamados = chamadoRepository.findAll(filtro);
+
+        if (chamados.isEmpty()) {
+            throw new NotFoundException("Chamado com id = " + id + " e nome = " + nomeChamado + " não encontrado");
+        }
+
+        ChamadoModel chamado = chamados.getFirst();
 
         if (chamado.getStatus().equals(StatusEnum.FINALIZADO)) {
             throw new CallCompletedException("Impossível alterar status, chamado já foi finalizado!");
