@@ -15,6 +15,9 @@ import lombok.*;
 public class ResponseChamadoDTO {
 
     @NotBlank
+    private Long refId;
+
+    @NotBlank
     private String titulo;
 
     @NotBlank
@@ -31,4 +34,8 @@ public class ResponseChamadoDTO {
 
     @NotNull
     private String nomeSolicitante;
+
+    @NotNull
+    private String nomeAtendente;
+
 }
