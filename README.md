@@ -150,6 +150,14 @@ COLABORADOR → ATENDENTE → ADMINISTRADOR
 - `PATCH /v1/comentarios/{idComentario}`
 - `DELETE /v1/comentarios/{idComentario}`
 
+### Comportamento de exclusão (deletes)
+
+- Comentários: exclusão lógica (soft delete). O endpoint DELETE marca o comentário como inativo (coluna `inativo`) — o registro não é removido fisicamente.
+- Chamados: exclusão lógica (soft delete). O DELETE marca o chamado como inativo (coluna `inativo`); o histórico e comentários relacionados permanecem no banco.
+- Usuários: exclusão lógica. O DELETE marca o usuário como inativo (`inativo = true`) e o usuário deixa de aparecer nas listagens ativas.
+- Categorias: exclusão física. A categoria é removida fisicamente com DELETE somente se não houver chamados vinculados; caso exista vínculo, a operação falha com DataIntegrityViolationException.
+- Histórico de chamados (historico_chamado): não existe endpoint de exclusão — os registros de histórico são preservados e não são removidos automaticamente.
+
 ---
 
 ## 🧩 Estrutura do projeto
