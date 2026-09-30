@@ -18,4 +18,6 @@ public class ComentarioRequiredDTO {
     @NotNull
     private Long idUsuarioRemetente;
 
+    @NotNull
+    private Long idUsuarioDestinatario;
 }
