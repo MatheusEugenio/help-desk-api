@@ -47,7 +47,7 @@ class ComentarioController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    public void deleteAllComentario() throws NotFoundException {
+    public void deleteAllComentario() {
         comentarioService.deleteAll();
     }
 
