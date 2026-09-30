@@ -21,4 +21,7 @@ public class ResponseComentarioDTO {
     @NotNull
     private String emailUsuarioRemetente;
 
+    @NotNull
+    private String emailUsuarioDestinatario;
+
 }
