@@ -2,6 +2,7 @@ package com.controller;
 
 import com.dto.ComentarioRequiredDTO;
 import com.dto.ResponseComentarioDTO;
+import com.exception.AlreadyExistsException;
 import com.exception.NotFoundException;
 import com.service.ComentarioService;
 import jakarta.validation.Valid;
@@ -28,7 +29,7 @@ class ComentarioController {
 
     @PostMapping("/{chamadoId}/chamado")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseComentarioDTO createComentario(@Valid @PathVariable Long chamadoId, @Valid @RequestBody ComentarioRequiredDTO comentario) throws NotFoundException {
+    public ResponseComentarioDTO createComentario(@Valid @PathVariable Long chamadoId, @Valid @RequestBody ComentarioRequiredDTO comentario) throws NotFoundException, AlreadyExistsException {
         return comentarioService.create(chamadoId, comentario);
     }
 
@@ -42,6 +43,12 @@ class ComentarioController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteComentario(@PathVariable Long idComentario) throws NotFoundException {
         comentarioService.delete(idComentario);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAllComentario() throws NotFoundException {
+        comentarioService.deleteAll();
     }
 
 }
