@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -28,6 +31,10 @@ public class HistoricoChamadoModel {
 
     @Column(length = 40)
     private String novoValor;
+
+    @CreationTimestamp
+    @Column(name = "criado_em", nullable = false, updatable = false)
+    private Instant criadoEm;
 
     @ManyToOne
     @JoinColumn(name = "chamado_id", nullable = false)

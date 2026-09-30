@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -138,6 +139,7 @@ public class ChamadoService {
         var valorAnterior = chamado.getStatus();
 
         chamado.setStatus(StatusEnum.FINALIZADO);
+        chamado.setFechadoEm(Instant.now());
 
         chamadoRepository.save(chamado);
 
@@ -179,6 +181,7 @@ public class ChamadoService {
         var statusAnterior = chamado.getStatus();
 
         chamado.setStatus(StatusEnum.ABERTO);
+        chamado.setFechadoEm(null);
 
         chamadoRepository.save(chamado);
 
@@ -209,6 +212,7 @@ public class ChamadoService {
         var valorAnterior = chamado.getStatus().toString();
 
         chamado.setStatus(status);
+        chamado.setFechadoEm(status == StatusEnum.FINALIZADO ? Instant.now() : null);
 
         chamadoRepository.save(chamado);
 

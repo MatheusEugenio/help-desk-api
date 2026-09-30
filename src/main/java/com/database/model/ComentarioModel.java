@@ -3,7 +3,10 @@ package com.database.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SoftDelete;
+
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -31,6 +34,10 @@ public class ComentarioModel {
 
     @Column
     private String mensagem;
+
+    @CreationTimestamp
+    @Column(name = "criado_em", nullable = false, updatable = false)
+    private Instant criadoEm;
 
     @ManyToOne
     @JoinColumn(name = "usuario_destinatario_id")
