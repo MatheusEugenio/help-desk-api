@@ -26,10 +26,14 @@ public class ComentarioModel {
     private ChamadoModel chamado;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private UsuarioModel usuario;
+    @JoinColumn(name = "usuario_remetente_id")
+    private UsuarioModel usuarioRemetente;
 
     @Column
     private String mensagem;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_destinatario_id")
+    private UsuarioModel usuarioDestinatario;
 
 }
