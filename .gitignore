@@ -4,7 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-feature/comentario-chamado
+!docs/images/esquema-banco-dados.png
 
 ### STS ###
 .apt_generated
