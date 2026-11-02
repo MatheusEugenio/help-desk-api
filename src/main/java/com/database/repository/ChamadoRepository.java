@@ -11,5 +11,7 @@ public interface ChamadoRepository extends JpaRepository<ChamadoModel, Long>, Jp
 
     Optional<ChamadoModel> findByTitulo(String titulo);
 
+    boolean existsByCategoriaId(Long categoriaId);
+
     ChamadoModel findBy(Specification<ChamadoModel> filtro);
 }

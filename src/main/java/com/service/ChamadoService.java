@@ -64,8 +64,9 @@ public class ChamadoService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseChamadoDTO createdChamado(ChamadoRequiredDTO chamadoRequiredDTO) throws AlreadyExistsException, NotFoundException, InappropriateUserRoleException {
 
-        chamadoRepository.findByTitulo(chamadoRequiredDTO.getTitulo())
-                .orElseThrow(() -> new AlreadyExistsException("Já existe chamado com o mesmo título!"));
+        if (chamadoRepository.findByTitulo(chamadoRequiredDTO.getTitulo()).isPresent()) {
+            throw new AlreadyExistsException("Já existe chamado com o mesmo título!");
+        }
         ChamadoModel chamado;
 
         UsuarioModel solicitante = usuarioRepository.findById(chamadoRequiredDTO.getIdSolicitante())
@@ -74,12 +75,18 @@ public class ChamadoService {
         if (!solicitante.getPapel().equals(PapelUsuarioEnum.COLABORADOR)) {
             throw new InappropriateUserRoleException("O usuário não é colaborador");
         }
+        if (solicitante.isInativo()) {
+            throw new NotFoundException("O solicitante está desativado");
+        }
 
         UsuarioModel atendente = usuarioRepository.findById(chamadoRequiredDTO.getIdAtendente())
                 .orElseThrow(() -> new NotFoundException("Usuario com ID = " + chamadoRequiredDTO.getIdSolicitante() + " não encontrado"));
 
         if (!atendente.getPapel().equals(PapelUsuarioEnum.ATENDENTE)) {
             throw new InappropriateUserRoleException("O usuário não é atendente");
+        }
+        if (atendente.isInativo()) {
+            throw new NotFoundException("O atendente está desativado");
         }
 
         Categoria categoria = categoriaRepository.findById(chamadoRequiredDTO.getIdCategoria())
@@ -222,10 +229,6 @@ public class ChamadoService {
 
         ChamadoModel chamado = chamadoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Chamado com id = " + id + " não encontrado"));
-
-        var valorAnterior = chamado.getStatus().toString();
-
-        persistInHistoricoChamado(valorAnterior, "INATIVAÇÃO DO CHAMADO", "CHAMADO EXCLUIDO", chamado);
 
         chamadoRepository.delete(chamado);
     }

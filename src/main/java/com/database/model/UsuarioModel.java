@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.SoftDelete;
 
 @Getter
 @Setter
@@ -16,7 +15,6 @@ import org.hibernate.annotations.SoftDelete;
 @Builder
 @Entity
 @Table(name = "usuario")
-@SoftDelete(columnName = "inativo")
 public class UsuarioModel {
 
     @Id
@@ -36,5 +34,9 @@ public class UsuarioModel {
     @NotNull
     @Column(nullable = false)
     private PapelUsuarioEnum papel;
+
+    @Builder.Default
+    @Column(name = "inativo", nullable = false)
+    private boolean inativo = false;
 
 }

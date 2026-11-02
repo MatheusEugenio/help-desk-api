@@ -2,6 +2,7 @@ package com.handler;
 
 import com.exception.*;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,6 +11,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorReponse> DataIntegrityViolationExceptionHandler(DataIntegrityViolationException ex) {
+        ErrorReponse errorReponse = ErrorReponse.builder()
+                .mensagem(ex.getMessage())
+                .status(HttpStatus.CONFLICT.value())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorReponse);
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorReponse> NotFounExceptiondHandler(NotFoundException ex) {
