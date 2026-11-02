@@ -85,10 +85,6 @@ public class UsuarioService {
         return convertForUsuarioDTO(usuario);
     }
 
-    /////////////////////////////////////
-    /// PRIVATE METHODS
-    /////////////////////////////////////
-
     private UsuarioDTO convertForUsuarioDTO(UsuarioModel user) {
         return UsuarioDTO.builder()
                 .nome(user.getNome())
