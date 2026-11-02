@@ -86,10 +86,6 @@ public class ComentarioService {
         comentarioRepository.deleteAll();
     }
 
-    /// //////////////////////////////////
-    /// PRIVATE METHODS
-    /// //////////////////////////////////
-
     private ResponseComentarioDTO mapToResponseComentarioDTO(ComentarioModel comentario) {
         return ResponseComentarioDTO.builder()
                 .emailUsuarioRemetente(comentario.getUsuarioRemetente().getEmail())

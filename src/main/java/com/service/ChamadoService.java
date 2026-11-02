@@ -230,10 +230,6 @@ public class ChamadoService {
         chamadoRepository.delete(chamado);
     }
 
-    /////////////////////////////////////
-    /// PRIVATE METHODS
-    /////////////////////////////////////
-
     private ResponseChamadoDTO mapToResponseChamado(ChamadoModel chamado) {
         return ResponseChamadoDTO.builder()
                 .refId(chamado.getId())

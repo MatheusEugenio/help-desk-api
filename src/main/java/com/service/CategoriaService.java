@@ -56,10 +56,6 @@ public class CategoriaService {
         return converForResponseCategoria(categoria);
     }
 
-    /////////////////////////////////////
-    /// PRIVATE METHODS
-    /////////////////////////////////////
-
     private ResponseCategoriaDTO converForResponseCategoria(Categoria categoria) {
         return ResponseCategoriaDTO.builder()
                 .nomeCategoria(categoria.getNomeCategoria())
